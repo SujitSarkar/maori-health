@@ -8,6 +8,13 @@ abstract class StringConstants {
   static const String notification = 'Notification';
   static const String settings = 'Settings';
 
+  // Settings Menu
+  static const String myProfile = 'My Profile';
+  static const String assets = 'Assets';
+  static const String timesheets = 'Timesheets';
+  static const String darkMode = 'Dark Mode';
+  static const String signOut = 'Sign Out';
+
   // Common
   static const String ok = 'OK';
   static const String cancel = 'Cancel';

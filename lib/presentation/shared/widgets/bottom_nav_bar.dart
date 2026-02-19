@@ -17,12 +17,7 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
 
-  static const _pages = <Widget>[
-    DashboardPage(),
-    SchedulePage(),
-    NotificationPage(),
-    SettingsPage(),
-  ];
+  static const _pages = <Widget>[DashboardPage(), SchedulePage(), NotificationPage(), SettingsPage()];
 
   void _onTabTapped(int index) {
     if (index == _currentIndex) return;
@@ -38,8 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: theme.colorScheme.primary,
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-          boxShadow: [BoxShadow(color: theme.shadowColor, blurRadius: 10, offset: const Offset(0, -2))],
+          boxShadow: [BoxShadow(color: theme.shadowColor, offset: const Offset(0, -2))],
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
