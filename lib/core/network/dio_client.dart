@@ -1,0 +1,52 @@
+import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
+
+import 'package:maori_health/core/config/app_constants.dart';
+import 'package:maori_health/core/config/env_config.dart';
+import 'package:maori_health/core/network/interceptors/auth_interceptor.dart';
+import 'package:maori_health/core/network/interceptors/refresh_token_interceptor.dart';
+import 'package:maori_health/core/storage/secure_storage_service.dart';
+
+class DioClient {
+  late final Dio _dio;
+
+  DioClient({required SecureStorageService secureStorage}) {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: EnvConfig.baseUrl,
+        connectTimeout: AppConstants.connectTimeout,
+        receiveTimeout: AppConstants.receiveTimeout,
+        headers: {'Accept': 'application/json'},
+      ),
+    );
+
+    _dio.interceptors.addAll([
+      AuthInterceptor(secureStorage: secureStorage),
+      RefreshTokenInterceptor(dio: _dio, secureStorage: secureStorage),
+      if (EnvConfig.isDev)
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          logPrint: (obj) => debugPrint(obj.toString(), wrapWidth: 1024),
+        ),
+    ]);
+  }
+
+  Dio get dio => _dio;
+
+  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters, Options? options}) {
+    return _dio.get<T>(path, queryParameters: queryParameters, options: options);
+  }
+
+  Future<Response<T>> post<T>(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) {
+    return _dio.post<T>(path, data: data, queryParameters: queryParameters, options: options);
+  }
+
+  Future<Response<T>> put<T>(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) {
+    return _dio.put<T>(path, data: data, queryParameters: queryParameters, options: options);
+  }
+
+  Future<Response<T>> delete<T>(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) {
+    return _dio.delete<T>(path, data: data, queryParameters: queryParameters, options: options);
+  }
+}
