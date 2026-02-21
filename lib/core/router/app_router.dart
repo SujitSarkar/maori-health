@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/router/route_names.dart';
+import 'package:maori_health/presentation/auth/pages/login_page.dart';
 import 'package:maori_health/presentation/splash/pages/splash_page.dart';
 import 'package:maori_health/presentation/shared/widgets/bottom_nav_bar.dart';
 
@@ -20,6 +21,11 @@ class AppRouter {
           name: RouteNames.splash,
           path: RouteNames.splashPath,
           builder: (context, state) => const SplashPage(),
+        ),
+        GoRoute(
+          name: RouteNames.login,
+          path: RouteNames.loginPath,
+          builder: (context, state) => const LoginPage(),
         ),
         GoRoute(
           name: RouteNames.home,

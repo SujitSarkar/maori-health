@@ -42,11 +42,11 @@ android {
     productFlavors {
         create("dev") {
             dimension = "default"
-            resValue("string", "app_name", "Dev Maori Health")
+            resValue("string", "app_name", "Dev HBSS")
         }
         create("prod") {
             dimension = "default"
-            resValue("string", "app_name", "Maori Health")
+            resValue("string", "app_name", "HBSS")
         }
     }
 }

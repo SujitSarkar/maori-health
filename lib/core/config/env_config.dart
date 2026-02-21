@@ -19,11 +19,11 @@ abstract class EnvConfig {
     switch (env) {
       case Env.dev:
         envName = 'Development';
-        baseUrl = 'https://api.dev.maorihealth.com/api/v1/';
+        baseUrl = 'https://v3admin.thctsandbox.co.nz/api/v1/';
 
       case Env.prod:
         envName = 'Production';
-        baseUrl = 'https://api.maorihealth.com/api/v1/';
+        baseUrl = 'https://v3admin.thctsandbox.co.nz/api/v1/';
     }
   }
 

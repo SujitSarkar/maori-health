@@ -1,0 +1,88 @@
+import 'package:maori_health/domain/auth/entities/user.dart';
+
+class UserModel extends User {
+  const UserModel({
+    required super.id,
+    required super.email,
+    super.firstName,
+    super.middleName,
+    super.lastName,
+    super.nickName,
+    super.phone,
+    super.location,
+    super.userType,
+    super.gender,
+    super.proNoun,
+    super.dob,
+    super.status,
+    super.age,
+    super.ageGroup,
+    super.avatar,
+    super.photoId,
+    super.nhi,
+    super.ethnicity,
+    super.teamId,
+    super.externalAccess,
+    super.limitedAccess,
+    super.operatorId,
+    super.fullName,
+  });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] as int,
+      email: json['email'] as String,
+      firstName: json['f_name'] as String?,
+      middleName: json['m_name'] as String?,
+      lastName: json['l_name'] as String?,
+      nickName: json['nick_name'] as String?,
+      phone: json['phone'] as String?,
+      location: json['location'] as String?,
+      userType: json['user_type'] as String?,
+      gender: json['gender'] as String?,
+      proNoun: json['pro_noun'] as String?,
+      dob: json['dob'] as String?,
+      status: json['status'] as String?,
+      age: json['age']?.toString(),
+      ageGroup: json['age_group'] as String?,
+      avatar: json['avatar'] as String?,
+      photoId: json['photo_id']?.toString(),
+      nhi: json['nhi'] as String?,
+      ethnicity: json['ethnicity'] as String?,
+      teamId: json['team_id'] as int?,
+      externalAccess: json['external_access'] as String?,
+      limitedAccess: json['limited_access'] as String?,
+      operatorId: json['operator_id'] as int?,
+      fullName: json['full_name'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'f_name': firstName,
+      'm_name': middleName,
+      'l_name': lastName,
+      'nick_name': nickName,
+      'email': email,
+      'phone': phone,
+      'location': location,
+      'user_type': userType,
+      'gender': gender,
+      'pro_noun': proNoun,
+      'dob': dob,
+      'status': status,
+      'age': age,
+      'age_group': ageGroup,
+      'avatar': avatar,
+      'photo_id': photoId,
+      'nhi': nhi,
+      'ethnicity': ethnicity,
+      'team_id': teamId,
+      'external_access': externalAccess,
+      'limited_access': limitedAccess,
+      'operator_id': operatorId,
+      'full_name': fullName,
+    };
+  }
+}

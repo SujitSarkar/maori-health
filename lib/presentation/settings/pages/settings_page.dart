@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/presentation/app/bloc/bloc.dart';
+import 'package:maori_health/presentation/auth/bloc/bloc.dart';
 import 'package:maori_health/presentation/settings/widgets/settings_tile.dart';
+import 'package:maori_health/presentation/shared/widgets/confirmation_dialog.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -15,7 +17,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+          padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,7 +71,18 @@ class SettingsPage extends StatelessWidget {
                           icon: Icons.logout,
                           title: StringConstants.signOut,
                           color: theme.colorScheme.error,
-                          onTap: () {},
+                          onTap: () async {
+                            final confirmed = await showConfirmationDialog(
+                              context,
+                              title: StringConstants.signOut,
+                              message: StringConstants.areYouSureYouWantToSignOut,
+                              confirmText: StringConstants.signOut,
+                              confirmColor: theme.colorScheme.error,
+                            );
+                            if (confirmed && context.mounted) {
+                              context.read<AuthBloc>().add(const AuthLogoutRequested());
+                            }
+                          },
                         ),
                       ],
                     ),

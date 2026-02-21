@@ -1,41 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:maori_health/core/config/string_constants.dart';
+import 'package:maori_health/core/config/app_constants.dart';
 import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/theme/app_colors.dart';
 
-class SplashPage extends StatefulWidget {
+import 'package:maori_health/presentation/auth/bloc/bloc.dart';
+
+class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
-  @override
-  void initState() {
-    super.initState();
-    _navigateToHome();
-  }
-
-  Future<void> _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 2));
-    if (mounted) {
-      context.goNamed(RouteNames.home);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      body: Center(
-        child: Text(
-          StringConstants.appName,
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.status == AuthStatus.authenticated) {
+          context.goNamed(RouteNames.home);
+        } else if (state.status == AuthStatus.unauthenticated) {
+          context.goNamed(RouteNames.login);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.primary,
+        body: Center(
+          child: Text(
+            AppConstants.appName,
+            style: Theme.of(
+              context,
+            ).textTheme.headlineLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
