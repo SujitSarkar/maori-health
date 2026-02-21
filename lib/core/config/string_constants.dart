@@ -1,6 +1,5 @@
-import 'package:maori_health/core/config/app_constants.dart';
-
 abstract class StringConstants {
+  static const String appName = 'HBSS';
   // Bottom Navigation
   static const String dashboard = 'Dashboard';
   static const String schedule = 'Schedule';
@@ -8,7 +7,7 @@ abstract class StringConstants {
   static const String settings = 'Settings';
 
   // Settings Menu
-  static const String myProfile = 'My Profile';
+  static const String profile = 'Profile';
   static const String assets = 'Assets';
   static const String timesheets = 'Timesheets';
   static const String darkMode = 'Dark Mode';
@@ -22,11 +21,11 @@ abstract class StringConstants {
   static const String areYouSureYouWantToSignOut = 'Are you sure you want to sign out?';
 
   // Dashboard
-  static const String welcomeTo = 'Welcome to ${AppConstants.appName}';
+  static const String welcomeTo = 'Welcome to $appName';
   static const String availableJobs = 'Available Jobs';
   static const String currentScheduled = 'Current Scheduled';
   static const String nextSchedule = 'Next Schedule';
-  static const String todaySchedule = 'Today’s Schedule';
+  static const String todaySchedule = 'Today\'s Schedule';
   static const String upcomingSchedule = 'Upcoming Schedule';
   static const String startTime = 'Start Time';
   static const String endTime = 'End Time';
@@ -38,6 +37,72 @@ abstract class StringConstants {
   static const String completeJob = 'Complete job';
   static const String totalClient = 'Total Client';
   static const String missedTimesheets = 'Missed\nTimesheets';
+
+  // Profile
+  static const String basicInformation = 'Basic Information';
+  static const String contactInformation = 'Contact Information';
+  static const String fullName = 'Full Name';
+  static const String nickName = 'Nick Name';
+  static const String gender = 'Gender';
+  static const String dateOfBirth = 'Date of Birth';
+  static const String age = 'Age';
+  static const String ethnicity = 'Ethnicity';
+  static const String statusLabel = 'Status';
+  static const String type = 'Type';
+  static const String joinedDate = 'Joined Date';
+  static const String location = 'Location';
+  static const String phone = 'Phone';
+  static const String nhi = 'NHI';
+  static const String changePassword = 'Change Password';
+
+  // Change Password
+  static const String oldPassword = 'Old Password';
+  static const String newPassword = 'New Password';
+  static const String confirmPassword = 'Confirm Password';
+  static const String save = 'Save';
+  static const String close = 'Close';
+  static const String passwordsDoNotMatch = 'Passwords do not match';
+
+  // Job Details
+  static const String jobDetails = 'Job Details';
+  static const String date = 'Date';
+  static const String jobType = 'Job Type';
+  static const String clientName = 'Client Name';
+  static const String clientAddress = 'Client Address';
+  static const String duration = 'Duration';
+  static const String hours = 'Hours';
+  static const String scheduledTime = 'Scheduled Time';
+  static const String start = 'Start';
+  static const String end = 'End';
+  static const String jobStartedTime = 'Job Started  Time';
+  static const String acceptJob = 'Accept Job';
+  static const String startJob = 'Start Job';
+  static const String finishJob = 'Finish Job';
+  static const String backToDashboard = 'Back to Dashboard';
+
+  // Assets
+  static const String id = 'ID';
+  static const String assignmentDate = 'Assignment Date';
+  static const String acknowledgementStatus = 'Acknowledgement Status';
+  static const String pending = 'Pending';
+  static const String accepted = 'Accepted';
+  static const String returned = 'Returned';
+  static const String view = 'View';
+  static const String accept = 'Accept';
+  static const String na = 'N/A';
+  static const String viewDetails = 'View Details';
+  static const String aid = 'AID';
+  static const String product = 'Product';
+  static const String assignDate = 'Assign Date';
+  static const String operator = 'Operator';
+  static const String acknowledgement = 'Acknowledgement';
+  static const String at = 'At';
+  static const String description = 'Description';
+  static const String attachment = 'Attachment';
+  static const String noAttachment = 'No attachment';
+
+  // Notification
+  static const String today = 'Today';
 
   // Common
   static const String ok = 'OK';

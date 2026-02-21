@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
+import 'package:maori_health/core/router/route_names.dart';
+
 import 'package:maori_health/presentation/app/bloc/bloc.dart';
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
 import 'package:maori_health/presentation/settings/widgets/settings_tile.dart';
@@ -19,7 +22,7 @@ class SettingsPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               Text(
                 StringConstants.settings,
@@ -36,8 +39,16 @@ class SettingsPage extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SettingsTile(icon: Icons.person_outline, title: StringConstants.myProfile, onTap: () {}),
-                        SettingsTile(icon: Icons.photo_library_outlined, title: StringConstants.assets, onTap: () {}),
+                        SettingsTile(
+                          icon: Icons.person_outline,
+                          title: StringConstants.profile,
+                          onTap: () => context.pushNamed(RouteNames.profile),
+                        ),
+                        SettingsTile(
+                          icon: Icons.photo_library_outlined,
+                          title: StringConstants.assets,
+                          onTap: () => context.pushNamed(RouteNames.assets),
+                        ),
                         SettingsTile(icon: Icons.access_time_outlined, title: StringConstants.timesheets, onTap: () {}),
                         BlocBuilder<AppBloc, AppState>(
                           builder: (context, state) {

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/config/assets.dart';
 import 'package:maori_health/core/config/string_constants.dart';
+import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
+import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
+import 'package:maori_health/presentation/dashboard/widgets/job_card.dart';
 import 'package:maori_health/presentation/dashboard/widgets/job_carousel.dart';
 import 'package:maori_health/presentation/dashboard/widgets/stat_card.dart';
-import 'package:maori_health/presentation/dashboard/widgets/job_card.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -20,13 +23,29 @@ class DashboardPage extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               _buildHeader(context),
               const SizedBox(height: 20),
               _buildSectionTitle(context, StringConstants.availableJobs),
               const SizedBox(height: 12),
-              JobCarousel(items: _dummyJobs),
+              JobCarousel(
+                items: _dummyJobs
+                    .map(
+                      (j) => JobCarouselItem(
+                        date: j.date,
+                        title: j.title,
+                        address: j.address,
+                        startedAt: j.startedAt,
+                        startTime: j.startTime,
+                        endTime: j.endTime,
+                        totalHours: j.totalHours,
+                        status: j.status,
+                        onTap: () => context.pushNamed(RouteNames.jobDetails, extra: j),
+                      ),
+                    )
+                    .toList(),
+              ),
               const SizedBox(height: 24),
               GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -44,68 +63,16 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 24),
               _buildSectionTitle(context, StringConstants.currentScheduled),
               const SizedBox(height: 12),
-              ..._dummyScheduled.map(
-                (job) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: JobCard(
-                    date: job.date,
-                    title: job.title,
-                    address: job.address,
-                    startedAt: job.startedAt,
-                    startTime: job.startTime,
-                    endTime: job.endTime,
-                    totalHours: job.totalHours,
-                  ),
-                ),
-              ),
+              ..._buildJobList(context, _dummyScheduled),
               _buildSectionTitle(context, StringConstants.nextSchedule),
               const SizedBox(height: 12),
-              ..._dummyScheduled.map(
-                (job) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: JobCard(
-                    date: job.date,
-                    title: job.title,
-                    address: job.address,
-                    startedAt: job.startedAt,
-                    startTime: job.startTime,
-                    endTime: job.endTime,
-                    totalHours: job.totalHours,
-                  ),
-                ),
-              ),
+              ..._buildJobList(context, _dummyScheduled),
               _buildSectionTitle(context, StringConstants.todaySchedule),
               const SizedBox(height: 12),
-              ..._dummyScheduled.map(
-                (job) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: JobCard(
-                    date: job.date,
-                    title: job.title,
-                    address: job.address,
-                    startedAt: job.startedAt,
-                    startTime: job.startTime,
-                    endTime: job.endTime,
-                    totalHours: job.totalHours,
-                  ),
-                ),
-              ),
+              ..._buildJobList(context, _dummyScheduled),
               _buildSectionTitle(context, StringConstants.upcomingSchedule),
               const SizedBox(height: 12),
-              ..._dummyScheduled.map(
-                (job) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: JobCard(
-                    date: job.date,
-                    title: job.title,
-                    address: job.address,
-                    startedAt: job.startedAt,
-                    startTime: job.startTime,
-                    endTime: job.endTime,
-                    totalHours: job.totalHours,
-                  ),
-                ),
-              ),
+              ..._buildJobList(context, _dummyScheduled),
             ],
           ),
         ),
@@ -124,7 +91,7 @@ class DashboardPage extends StatelessWidget {
           children: [
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Text('Hi, $name', style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 2),
@@ -145,6 +112,27 @@ class DashboardPage extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold));
   }
+
+  List<Widget> _buildJobList(BuildContext context, List<JobCarouselItem> jobs) {
+    return jobs
+        .map(
+          (job) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: JobCard(
+              date: job.date,
+              title: job.title,
+              address: job.address,
+              startedAt: job.startedAt,
+              startTime: job.startTime,
+              endTime: job.endTime,
+              totalHours: job.totalHours,
+              status: job.status,
+              onTap: () => context.pushNamed(RouteNames.jobDetails, extra: job),
+            ),
+          ),
+        )
+        .toList();
+  }
 }
 
 // ── Placeholder data (will be replaced with BLoC-driven data) ──
@@ -157,6 +145,7 @@ final _dummyJobs = [
     startTime: '9:00AM',
     endTime: '11:00AM',
     totalHours: '2.00',
+    status: JobStatus.accepted,
   ),
   const JobCarouselItem(
     date: 'Friday, January 3, 2024',
@@ -166,6 +155,7 @@ final _dummyJobs = [
     startTime: '10:00AM',
     endTime: '12:00PM',
     totalHours: '2.00',
+    status: JobStatus.accepted,
   ),
   const JobCarouselItem(
     date: 'Friday, January 4, 2024',
@@ -175,6 +165,7 @@ final _dummyJobs = [
     startTime: '10:00AM',
     endTime: '12:00PM',
     totalHours: '2.00',
+    status: JobStatus.accepted,
   ),
 ];
 
@@ -195,6 +186,7 @@ const _dummyScheduled = [
     startTime: '9:00AM',
     endTime: '11:00AM',
     totalHours: '2.00',
+    status: JobStatus.pending,
   ),
   JobCarouselItem(
     date: 'Thursday, January 3, 2024',
@@ -203,6 +195,16 @@ const _dummyScheduled = [
     startTime: '9:00AM',
     endTime: '11:00AM',
     totalHours: '2.00',
+    status: JobStatus.accepted,
+  ),
+  JobCarouselItem(
+    date: 'Thursday, January 3, 2024',
+    title: 'Personal Care - John Doe',
+    address: '64 Hinerangi St, Turangi',
+    startTime: '9:00AM',
+    endTime: '11:00AM',
+    totalHours: '2.00',
+    status: JobStatus.started,
   ),
 ];
 

@@ -39,7 +39,7 @@ class SolidButton extends StatelessWidget {
           foregroundColor: foregroundColor ?? colorScheme.onPrimary,
           disabledBackgroundColor: (backgroundColor ?? colorScheme.primary).withAlpha(200),
           disabledForegroundColor: (foregroundColor ?? colorScheme.onPrimary).withAlpha(200),
-          shape: RoundedRectangleBorder(borderRadius: .circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: .circular(8)),
           elevation: isLoading ? 0 : 2,
           padding: padding,
         ),

@@ -1,0 +1,140 @@
+import 'package:flutter/material.dart';
+
+import 'package:maori_health/core/config/string_constants.dart';
+import 'package:maori_health/core/theme/app_colors.dart';
+import 'package:maori_health/core/utils/extensions.dart';
+import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
+
+class JobDetailsInfoCard extends StatelessWidget {
+  final String date;
+  final String jobType;
+  final String clientName;
+  final String clientAddress;
+  final String duration;
+  final String startTime;
+  final String endTime;
+  final String? jobStartedTime;
+  final JobStatus status;
+
+  const JobDetailsInfoCard({
+    super.key,
+    required this.date,
+    required this.jobType,
+    required this.clientName,
+    required this.clientAddress,
+    required this.duration,
+    required this.startTime,
+    required this.endTime,
+    this.jobStartedTime,
+    required this.status,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = context.textTheme;
+    final labelStyle = textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: context.theme.dividerColor),
+      ),
+      child: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(StringConstants.date, style: labelStyle),
+                    Text(date, style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              if (status == JobStatus.started)
+                Container(
+                  width: 14,
+                  height: 14,
+                  decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.success),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(StringConstants.jobType, style: labelStyle),
+          Text(jobType, style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Text(StringConstants.clientName, style: labelStyle),
+          Text(clientName, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Text(StringConstants.clientAddress, style: labelStyle),
+          Text(clientAddress, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Text(StringConstants.duration, style: labelStyle),
+          Row(
+            crossAxisAlignment: .baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(duration, style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(width: 6),
+              Text(StringConstants.hours, style: textTheme.bodyMedium),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(StringConstants.scheduledTime, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(jobStartedTime != null ? StringConstants.start : StringConstants.startTime, style: labelStyle),
+                    _buildTimeValue(context, startTime),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text(jobStartedTime != null ? StringConstants.end : StringConstants.endTime, style: labelStyle),
+                    _buildTimeValue(context, endTime),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (jobStartedTime != null) ...[
+            const SizedBox(height: 12),
+            Text(StringConstants.jobStartedTime, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 2),
+            Text(jobStartedTime!, style: textTheme.bodyMedium),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeValue(BuildContext context, String time) {
+    final parts = _splitTime(time);
+    return Row(
+      crossAxisAlignment: .baseline,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        Text(parts.$1, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+        const SizedBox(width: 4),
+        Text(parts.$2, style: context.textTheme.bodyMedium),
+      ],
+    );
+  }
+
+  (String, String) _splitTime(String time) {
+    final match = RegExp(r'^(\d{1,2}:\d{2})\s*(.*)$').firstMatch(time);
+    if (match != null) return (match.group(1)!, match.group(2) ?? '');
+    return (time, '');
+  }
+}

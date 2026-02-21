@@ -23,8 +23,14 @@ class User extends Equatable {
   final int? teamId;
   final String? externalAccess;
   final String? limitedAccess;
+  final String? externalLoginOtp;
+  final String? externalLoginOtpExpiredAt;
   final int? operatorId;
+  final String? emailVerifiedAt;
   final String? fullName;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
 
   const User({
     required this.id,
@@ -49,8 +55,14 @@ class User extends Equatable {
     this.teamId,
     this.externalAccess,
     this.limitedAccess,
+    this.externalLoginOtp,
+    this.externalLoginOtpExpiredAt,
     this.operatorId,
+    this.emailVerifiedAt,
     this.fullName,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
   });
 
   @override

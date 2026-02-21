@@ -21,6 +21,10 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
+  // TODO: Replace with dynamic count from BLoC
+  final int _notificationCount = 120;
+
+  String get _badgeLabel => _notificationCount > 99 ? '99+' : '$_notificationCount';
 
   static const _pages = <Widget>[DashboardPage(), SchedulePage(), NotificationPage(), SettingsPage()];
 
@@ -57,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               unselectedItemColor: theme.colorScheme.onPrimary.withAlpha(160),
               selectedFontSize: 12,
               unselectedFontSize: 12,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.dashboard_outlined),
                   activeIcon: Icon(Icons.dashboard),
@@ -69,8 +73,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   label: StringConstants.schedule,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications_outlined),
-                  activeIcon: Icon(Icons.notifications),
+                  icon: Badge(
+                    isLabelVisible: _notificationCount > 0,
+                    label: Text(_badgeLabel, style: TextStyle(fontSize: 10)),
+                    child: Icon(Icons.notifications_outlined),
+                  ),
+                  activeIcon: Badge(
+                    isLabelVisible: _notificationCount > 0,
+                    label: Text(_badgeLabel, style: TextStyle(fontSize: 10)),
+                    child: Icon(Icons.notifications),
+                  ),
                   label: StringConstants.notification,
                 ),
                 BottomNavigationBarItem(

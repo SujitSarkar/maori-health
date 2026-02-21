@@ -24,8 +24,14 @@ class UserModel extends User {
     super.teamId,
     super.externalAccess,
     super.limitedAccess,
+    super.externalLoginOtp,
+    super.externalLoginOtpExpiredAt,
     super.operatorId,
+    super.emailVerifiedAt,
     super.fullName,
+    super.createdAt,
+    super.updatedAt,
+    super.deletedAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -52,8 +58,14 @@ class UserModel extends User {
       teamId: json['team_id'] as int?,
       externalAccess: json['external_access'] as String?,
       limitedAccess: json['limited_access'] as String?,
+      externalLoginOtp: json['external_login_otp'] as String?,
+      externalLoginOtpExpiredAt: json['external_login_otp_expired_at'] as String?,
       operatorId: json['operator_id'] as int?,
+      emailVerifiedAt: json['email_verified_at'] as String?,
       fullName: json['full_name'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+      deletedAt: json['deleted_at'] as String?,
     );
   }
 
@@ -81,8 +93,14 @@ class UserModel extends User {
       'team_id': teamId,
       'external_access': externalAccess,
       'limited_access': limitedAccess,
+      'external_login_otp': externalLoginOtp,
+      'external_login_otp_expired_at': externalLoginOtpExpiredAt,
       'operator_id': operatorId,
+      'email_verified_at': emailVerifiedAt,
       'full_name': fullName,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'deleted_at': deletedAt,
     };
   }
 }

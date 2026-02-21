@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:maori_health/core/utils/extensions.dart';
+import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
 import 'package:maori_health/presentation/dashboard/widgets/job_card.dart';
 
 class JobCarouselItem {
@@ -11,7 +12,8 @@ class JobCarouselItem {
   final String startTime;
   final String endTime;
   final String totalHours;
-  final bool isActive;
+  final JobStatus status;
+  final VoidCallback? onTap;
 
   const JobCarouselItem({
     required this.date,
@@ -21,7 +23,8 @@ class JobCarouselItem {
     required this.startTime,
     required this.endTime,
     required this.totalHours,
-    this.isActive = true,
+    required this.status,
+    this.onTap,
   });
 }
 
@@ -75,7 +78,8 @@ class _JobCarouselState extends State<JobCarousel> {
                   startTime: job.startTime,
                   endTime: job.endTime,
                   totalHours: job.totalHours,
-                  isActive: job.isActive,
+                  status: job.status,
+                  onTap: job.onTap,
                 ),
               );
             },

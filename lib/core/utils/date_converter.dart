@@ -45,4 +45,26 @@ abstract class DateConverter {
   static String toDisplayTime(TimeOfDay time, {required String locale}) {
     return DateFormat('hh:mm a', locale).format(DateTime(0, 0, 0, time.hour, time.minute));
   }
+
+  static String timeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final diff = now.difference(dateTime);
+
+    if (diff.inSeconds < 60) return '${diff.inSeconds}s ago';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays < 7) return '${diff.inDays}d ago';
+
+    return DateFormat('dd-MM-yyyy').format(dateTime);
+  }
+
+  static String formatIso(String? isoDate, {String pattern = 'dd-MM-yyyy | h:mm a'}) {
+    if (isoDate == null || isoDate.isEmpty) return '-';
+    try {
+      final dt = DateTime.parse(isoDate);
+      return DateFormat(pattern).format(dt);
+    } catch (_) {
+      return isoDate;
+    }
+  }
 }

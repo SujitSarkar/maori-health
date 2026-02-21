@@ -39,3 +39,7 @@ extension BuildContextExtensions on BuildContext {
     _activeTopSnackBar = null;
   }
 }
+
+extension StringExtension on String {
+  String capitalize() => isEmpty ? this : '${this[0].toUpperCase()}${substring(1)}';
+}
