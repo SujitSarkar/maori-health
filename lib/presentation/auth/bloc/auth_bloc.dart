@@ -14,8 +14,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       super(const AuthLoadingState()) {
     on<AuthLocalLoginEvent>(_onLocalLoginEvent);
     on<AuthLoginEvent>(_onLoginEvent);
-    on<AuthLogoutEvent>(_onLogoutEvent);
     on<AuthChangePasswordEvent>(_onChangePassword);
+    on<AuthLogoutEvent>(_onLogoutEvent);
   }
 
   Future<void> _onLocalLoginEvent(AuthLocalLoginEvent event, Emitter<AuthState> emit) async {
