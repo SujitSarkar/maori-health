@@ -6,6 +6,7 @@ import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
+import 'package:maori_health/presentation/shared/widgets/loading_overlay.dart';
 
 import 'package:maori_health/presentation/dashboard/pages/dashboard_page.dart';
 import 'package:maori_health/presentation/schedule/pages/schedule_page.dart';
@@ -37,60 +38,63 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     final theme = context.theme;
 
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.status == AuthStatus.unauthenticated) {
+        if (state is UnAuthenticatedState) {
           context.goNamed(RouteNames.login);
         }
       },
-      child: Scaffold(
-        body: IndexedStack(index: _currentIndex, children: _pages),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.primary,
-            boxShadow: [BoxShadow(color: theme.shadowColor, offset: const Offset(0, -2))],
-          ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: _onTabTapped,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: theme.colorScheme.primary,
-              selectedItemColor: theme.colorScheme.onPrimary,
-              unselectedItemColor: theme.colorScheme.onPrimary.withAlpha(160),
-              selectedFontSize: 12,
-              unselectedFontSize: 12,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.dashboard_outlined),
-                  activeIcon: Icon(Icons.dashboard),
-                  label: StringConstants.dashboard,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today_outlined),
-                  activeIcon: Icon(Icons.calendar_today),
-                  label: StringConstants.schedule,
-                ),
-                BottomNavigationBarItem(
-                  icon: Badge(
-                    isLabelVisible: _notificationCount > 0,
-                    label: Text(_badgeLabel, style: TextStyle(fontSize: 10)),
-                    child: Icon(Icons.notifications_outlined),
+      builder: (context, authState) => LoadingOverlay(
+        isLoading: authState is AuthLoadingState,
+        child: Scaffold(
+          body: IndexedStack(index: _currentIndex, children: _pages),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary,
+              boxShadow: [BoxShadow(color: theme.shadowColor, offset: const Offset(0, -2))],
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              child: BottomNavigationBar(
+                currentIndex: _currentIndex,
+                onTap: _onTabTapped,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: theme.colorScheme.primary,
+                selectedItemColor: theme.colorScheme.onPrimary,
+                unselectedItemColor: theme.colorScheme.onPrimary.withAlpha(160),
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard_outlined),
+                    activeIcon: Icon(Icons.dashboard),
+                    label: StringConstants.dashboard,
                   ),
-                  activeIcon: Badge(
-                    isLabelVisible: _notificationCount > 0,
-                    label: Text(_badgeLabel, style: TextStyle(fontSize: 10)),
-                    child: Icon(Icons.notifications),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.calendar_today_outlined),
+                    activeIcon: Icon(Icons.calendar_today),
+                    label: StringConstants.schedule,
                   ),
-                  label: StringConstants.notification,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.settings_outlined),
-                  activeIcon: Icon(Icons.settings),
-                  label: StringConstants.settings,
-                ),
-              ],
+                  BottomNavigationBarItem(
+                    icon: Badge(
+                      isLabelVisible: _notificationCount > 0,
+                      label: Text(_badgeLabel, style: TextStyle(fontSize: 10)),
+                      child: Icon(Icons.notifications_outlined),
+                    ),
+                    activeIcon: Badge(
+                      isLabelVisible: _notificationCount > 0,
+                      label: Text(_badgeLabel, style: TextStyle(fontSize: 10)),
+                      child: Icon(Icons.notifications),
+                    ),
+                    label: StringConstants.notification,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.settings_outlined),
+                    activeIcon: Icon(Icons.settings),
+                    label: StringConstants.settings,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

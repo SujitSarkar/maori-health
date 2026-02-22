@@ -9,7 +9,7 @@ import 'package:maori_health/presentation/shared/widgets/app_shimmer.dart';
 class NotificationShimmer extends StatelessWidget {
   final int itemCount;
 
-  const NotificationShimmer({super.key, this.itemCount = 8});
+  const NotificationShimmer({super.key, this.itemCount = 12});
 
   @override
   Widget build(BuildContext context) {

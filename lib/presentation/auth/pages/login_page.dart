@@ -8,6 +8,7 @@ import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/theme/app_colors.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/core/utils/form_validators.dart';
+
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
 import 'package:maori_health/presentation/shared/decorations/outline_input_decoration.dart';
 import 'package:maori_health/presentation/shared/widgets/solid_button.dart';
@@ -36,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!_formKey.currentState!.validate()) return;
 
     context.read<AuthBloc>().add(
-      AuthLoginRequested(email: _emailController.text.trim(), password: _passwordController.text),
+      AuthLoginEvent(email: _emailController.text.trim(), password: _passwordController.text),
     );
   }
 
@@ -46,10 +47,10 @@ class _LoginPageState extends State<LoginPage> {
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.status == AuthStatus.authenticated) {
+        if (state is AuthenticatedState) {
           context.goNamed(RouteNames.home);
-        } else if (state.status == AuthStatus.failure) {
-          context.showSnackBar(state.errorMessage ?? StringConstants.somethingWentWrong, isError: true, onTop: true);
+        } else if (state is AuthErrorState) {
+          context.showSnackBar(state.errorMessage, isError: true, onTop: true);
         }
       },
       child: Scaffold(
@@ -96,9 +97,10 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               TextFormField(
                 controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
+                keyboardType: .emailAddress,
+                textInputAction: .next,
                 validator: FormValidators.email(),
+                autovalidateMode: .onUserInteraction,
                 decoration: OutlineInputDecoration(context: context, hintText: StringConstants.email),
               ),
               const SizedBox(height: 20),
@@ -108,6 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _onLogin(),
                 validator: FormValidators.password(),
+                autovalidateMode: .onUserInteraction,
+                keyboardType: .visiblePassword,
                 decoration: OutlineInputDecoration(
                   context: context,
                   hintText: StringConstants.password,
@@ -141,11 +145,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 16),
               BlocBuilder<AuthBloc, AuthState>(
-                buildWhen: (prev, curr) => prev.status != curr.status,
+                buildWhen: (prev, curr) => prev.runtimeType != curr.runtimeType,
                 builder: (context, state) {
                   return SolidButton(
                     onPressed: _onLogin,
-                    isLoading: state.status == AuthStatus.loading,
+                    isLoading: state is AuthLoadingState,
                     backgroundColor: const Color(0xFF1A5E2D),
                     foregroundColor: Colors.white,
                     child: Text(

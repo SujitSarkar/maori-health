@@ -18,11 +18,21 @@ import 'package:maori_health/data/notification/datasources/notification_remote_d
 import 'package:maori_health/data/notification/repositories/notification_repository_impl.dart';
 import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
 
+import 'package:maori_health/data/employee/datasources/employee_remote_data_source.dart';
+import 'package:maori_health/data/employee/repositories/employee_repository_impl.dart';
+import 'package:maori_health/domain/employee/repositories/employee_repository.dart';
+
+import 'package:maori_health/data/timesheet/datasources/timesheet_remote_data_source.dart';
+import 'package:maori_health/data/timesheet/repositories/timesheet_repository_impl.dart';
+import 'package:maori_health/domain/timesheet/repositories/timesheet_repository.dart';
+
 import 'package:maori_health/presentation/app/bloc/app_bloc.dart';
 import 'package:maori_health/presentation/asset/bloc/asset_bloc.dart';
 import 'package:maori_health/presentation/auth/bloc/auth_bloc.dart';
 import 'package:maori_health/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:maori_health/presentation/notification/bloc/notification_bloc.dart';
+import 'package:maori_health/presentation/employee/bloc/employee_bloc.dart';
+import 'package:maori_health/presentation/timesheet/bloc/timesheet_bloc.dart';
 
 void registerFeatureModule(GetIt getIt) {
   // ── App
@@ -66,6 +76,28 @@ void registerFeatureModule(GetIt getIt) {
       ),
     )
     ..registerFactory<NotificationBloc>(() => NotificationBloc(repository: getIt<NotificationRepository>()));
+
+  // ── Employee
+  getIt
+    ..registerLazySingleton<EmployeeRemoteDataSource>(() => EmployeeRemoteDataSourceImpl(client: getIt<DioClient>()))
+    ..registerLazySingleton<EmployeeRepository>(
+      () => EmployeeRepositoryImpl(
+        remoteDataSource: getIt<EmployeeRemoteDataSource>(),
+        networkChecker: getIt<NetworkChecker>(),
+      ),
+    )
+    ..registerFactory<EmployeeBloc>(() => EmployeeBloc(repository: getIt<EmployeeRepository>()));
+
+  // ── TimeSheet
+  getIt
+    ..registerLazySingleton<TimeSheetRemoteDataSource>(() => TimeSheetRemoteDataSourceImpl(client: getIt<DioClient>()))
+    ..registerLazySingleton<TimeSheetRepository>(
+      () => TimeSheetRepositoryImpl(
+        remoteDataSource: getIt<TimeSheetRemoteDataSource>(),
+        networkChecker: getIt<NetworkChecker>(),
+      ),
+    )
+    ..registerFactory<TimeSheetBloc>(() => TimeSheetBloc(repository: getIt<TimeSheetRepository>()));
 
   // ── Dashboard
   getIt.registerFactory<DashboardBloc>(() => DashboardBloc());

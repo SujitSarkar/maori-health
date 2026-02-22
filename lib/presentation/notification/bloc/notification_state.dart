@@ -1,32 +1,56 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:maori_health/domain/notification/entities/app_notification.dart';
+import 'package:maori_health/domain/notification/entities/notification_response.dart';
 
-enum NotificationPageStatus { initial, loading, loaded, error }
+abstract class NotificationState extends Equatable {
+  const NotificationState();
 
-class NotificationState extends Equatable {
-  final NotificationPageStatus status;
-  final List<AppNotification> notifications;
-  final String? errorMessage;
+  @override
+  List<Object?> get props => [];
+}
 
-  const NotificationState({
-    this.status = NotificationPageStatus.initial,
-    this.notifications = const [],
-    this.errorMessage,
+class NotificationLoadingState extends NotificationState {
+  const NotificationLoadingState();
+}
+
+class NotificationLoadedState extends NotificationState {
+  final List<NotificationResponse> notifications;
+  final int currentPage;
+  final int lastPage;
+  final bool isLoadingMore;
+
+  const NotificationLoadedState({
+    required this.notifications,
+    required this.currentPage,
+    required this.lastPage,
+    this.isLoadingMore = false,
   });
 
-  NotificationState copyWith({
-    NotificationPageStatus? status,
-    List<AppNotification>? notifications,
-    String? errorMessage,
+  bool get hasMore => currentPage < lastPage;
+
+  NotificationLoadedState copyWith({
+    List<NotificationResponse>? notifications,
+    int? currentPage,
+    int? lastPage,
+    bool? isLoadingMore,
   }) {
-    return NotificationState(
-      status: status ?? this.status,
+    return NotificationLoadedState(
       notifications: notifications ?? this.notifications,
-      errorMessage: errorMessage,
+      currentPage: currentPage ?? this.currentPage,
+      lastPage: lastPage ?? this.lastPage,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 
   @override
-  List<Object?> get props => [status, notifications, errorMessage];
+  List<Object?> get props => [notifications, currentPage, lastPage, isLoadingMore];
+}
+
+class NotificationErrorState extends NotificationState {
+  final String errorMessage;
+
+  const NotificationErrorState(this.errorMessage);
+
+  @override
+  List<Object?> get props => [errorMessage];
 }

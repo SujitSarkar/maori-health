@@ -33,7 +33,7 @@ class FormValidators {
     };
   }
 
-  static String? Function(String?) password({int minLength = 6}) {
+  static String? Function(String?) password({int minLength = 8}) {
     return (value) {
       if (value == null || value.isEmpty) return StringConstants.thisFieldIsRequired;
       if (value.length < minLength) return StringConstants.passwordTooShort;

@@ -2,6 +2,7 @@ import 'package:maori_health/core/error/exceptions.dart';
 import 'package:maori_health/core/error/failures.dart';
 import 'package:maori_health/core/network/network_checker.dart';
 import 'package:maori_health/core/result/result.dart';
+
 import 'package:maori_health/data/auth/datasources/auth_local_data_source.dart';
 import 'package:maori_health/data/auth/datasources/auth_remote_data_source.dart';
 import 'package:maori_health/data/auth/models/user_model.dart';
@@ -63,5 +64,36 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> logout() => _localDataSource.clearAll();
+  Future<bool> logout() async {
+    final success = await _remoteDataSource.logout();
+    if (success) {
+      await _localDataSource.clearAll();
+    }
+    return success;
+  }
+
+  @override
+  Future<Result<AppError, String>> updatePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    if (!await _networkChecker.hasConnection) {
+      return const ErrorResult(NetworkError());
+    }
+    try {
+      final message = await _remoteDataSource.updatePassword(
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+      );
+      return SuccessResult(message);
+    } on ApiException catch (e) {
+      return ErrorResult(
+        ApiError(errorCode: 'UPDATE_PASSWORD_FAILED', errorMessage: e.message, statusCode: e.statusCode),
+      );
+    } catch (e) {
+      return ErrorResult(ApiError(errorCode: 'UPDATE_PASSWORD_FAILED', errorMessage: e.toString()));
+    }
+  }
 }

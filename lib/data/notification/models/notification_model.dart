@@ -1,31 +1,25 @@
-import 'package:maori_health/domain/notification/entities/app_notification.dart';
+import 'package:maori_health/domain/notification/entities/notification.dart';
 
-class NotificationModel extends AppNotification {
+class NotificationModel extends Notification {
   const NotificationModel({
     required super.id,
-    super.jobId,
-    required super.message,
-    required super.createdAt,
-    super.isRead,
+    super.type,
+    super.notifiableType,
+    super.notifiableId,
+    super.readAt,
+    super.createdAt,
+    super.updatedAt,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'] as int,
-      jobId: json['job_id'] as int?,
-      message: json['message'] as String? ?? '',
-      createdAt: DateTime.tryParse(json['created_at'] as String? ?? '') ?? DateTime.now(),
-      isRead: json['is_read'] as bool? ?? false,
+      id: json['id'] as String,
+      type: json['type'] as String?,
+      notifiableType: json['notifiable_type'] as String?,
+      notifiableId: json['notifiable_id'] as int?,
+      readAt: json['read_at'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'job_id': jobId,
-      'message': message,
-      'created_at': createdAt.toIso8601String(),
-      'is_read': isRead,
-    };
   }
 }

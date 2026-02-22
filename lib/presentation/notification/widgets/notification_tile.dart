@@ -2,48 +2,50 @@ import 'package:flutter/material.dart';
 
 import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/utils/extensions.dart';
+import 'package:maori_health/domain/notification/entities/notification_response.dart';
 
 class NotificationTile extends StatelessWidget {
-  final String message;
-  final int? jobId;
-  final DateTime dateTime;
-  final bool isRead;
+  final NotificationResponse notification;
   final VoidCallback? onTap;
 
-  const NotificationTile({
-    super.key,
-    required this.message,
-    this.jobId,
-    required this.dateTime,
-    required this.isRead,
-    this.onTap,
-  });
+  const NotificationTile({super.key, required this.notification, this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final createdAt = DateTime.tryParse(notification.notification.createdAt ?? '');
+
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isRead ? context.theme.cardColor : context.theme.colorScheme.primary.withAlpha(30),
+          color: notification.isRead ? context.theme.cardColor : context.theme.colorScheme.primary.withAlpha(30),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: context.theme.dividerColor),
         ),
         child: Row(
-          crossAxisAlignment: .center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.notifications_none, size: 22, color: context.colorScheme.primary.withAlpha(180)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
-                crossAxisAlignment: .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$message - ', style: context.textTheme.bodyMedium),
-                  if (jobId != null) ...[
+                  Text(notification.title, style: context.textTheme.bodyMedium),
+                  if (notification.message.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      notification.message,
+                      style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  if (notification.data.jobScheduleId != null) ...[
                     const SizedBox(height: 4),
                     Text(
-                      '#$jobId',
+                      '#${notification.data.jobScheduleId}',
                       style: context.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: context.colorScheme.primary,
@@ -53,14 +55,16 @@ class NotificationTile extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(
-                DateConverter.timeAgo(dateTime),
-                style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+            if (createdAt != null) ...[
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Text(
+                  DateConverter.timeAgo(createdAt),
+                  style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

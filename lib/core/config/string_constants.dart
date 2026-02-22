@@ -9,7 +9,7 @@ abstract class StringConstants {
   // Settings Menu
   static const String profile = 'Profile';
   static const String assets = 'Assets';
-  static const String timesheets = 'Timesheets';
+  static const String timeSheets = 'Timesheets';
   static const String darkMode = 'Dark Mode';
   static const String signOut = 'Sign Out';
 
@@ -36,7 +36,7 @@ abstract class StringConstants {
   static const String cancelJob = 'Cancel Job';
   static const String completeJob = 'Complete job';
   static const String totalClient = 'Total Client';
-  static const String missedTimesheets = 'Missed\nTimesheets';
+  static const String missedTimeSheets = 'Missed\nTimesheets';
 
   // Profile
   static const String basicInformation = 'Basic Information';
@@ -101,19 +101,26 @@ abstract class StringConstants {
   static const String attachment = 'Attachment';
   static const String noAttachment = 'No attachment';
 
-  // Notification
-  static const String today = 'Today';
+  // TimeSheet
+  static const String appointments = 'Appointments';
+  static const String selectDateRange = 'Select Date Range';
+  static const String selectEmployee = 'Select Employee';
+  static const String searchEmployee = 'Search employee';
+  static const String select = 'Select';
+  static const String employee = 'Employee';
+  static const String apply = 'Apply';
+  static const String clear = 'Clear';
 
   // Common
   static const String ok = 'OK';
   static const String cancel = 'Cancel';
   static const String refresh = 'Refresh';
-  static const String noData = 'No data found';
+  static const String noDataFound = 'No data found';
   static const String thisFieldIsRequired = 'This field is required';
   static const String invalidEmail = 'Invalid email address';
   static const String nameTooShort = 'Name must be at least 2 characters long';
   static const String invalidName = 'Invalid name';
-  static const String passwordTooShort = 'Password must be at least 6 characters long';
+  static const String passwordTooShort = 'Password must be at least 8 characters long';
   static const String noInternet = 'No internet connection. Please check your network.';
   static const String somethingWentWrong = 'Something went wrong. Please try again.';
 }

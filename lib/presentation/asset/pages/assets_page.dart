@@ -40,7 +40,7 @@ class _AssetsView extends StatelessWidget {
             ),
             AssetPageStatus.loaded =>
               state.assets.isEmpty
-                  ? const NoDataFoundWidget(message: StringConstants.noData)
+                  ? const NoDataFoundWidget(message: StringConstants.noDataFound)
                   : _buildAssetList(context, state.assets),
           };
         },

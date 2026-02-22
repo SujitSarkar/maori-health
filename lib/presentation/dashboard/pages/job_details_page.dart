@@ -11,8 +11,9 @@ import 'package:maori_health/presentation/shared/widgets/solid_button.dart';
 enum JobStatus { pending, accepted, started }
 
 class JobDetailsPage extends StatefulWidget {
-  final JobCarouselItem job;
-  const JobDetailsPage({super.key, required this.job});
+  final JobCarouselItem? job;
+  final int? jobScheduleId;
+  const JobDetailsPage({super.key, this.job, this.jobScheduleId});
 
   @override
   State<JobDetailsPage> createState() => _JobDetailsPageState();
@@ -38,11 +39,11 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 duration: '2',
                 startTime: '9:00 AM',
                 endTime: '11:00 AM',
-                status: widget.job.status,
-                jobStartedTime: widget.job.status == JobStatus.started ? 'Start at 9.00 am' : null,
+                status: widget.job?.status ?? JobStatus.pending,
+                jobStartedTime: widget.job?.status == JobStatus.started ? 'Start at 9.00 am' : null,
               ),
               const SizedBox(height: 24),
-              _buildActions(),
+              if (widget.job != null) _buildActions(),
             ],
           ),
         ),
@@ -64,7 +65,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   }
 
   Widget _buildActions() {
-    return switch (widget.job.status) {
+    return switch (widget.job!.status) {
       JobStatus.pending => _buildPendingActions(),
       JobStatus.accepted => _buildAcceptedActions(),
       JobStatus.started => _buildStartedActions(),
@@ -75,7 +76,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Column(
       crossAxisAlignment: .stretch,
       children: [
-        SolidButton(onPressed: () => widget.job.onTap?.call(), child: const Text(StringConstants.acceptJob)),
+        SolidButton(onPressed: () => widget.job?.onTap?.call(), child: const Text(StringConstants.acceptJob)),
         const SizedBox(height: 24),
         SolidButton(
           onPressed: () => Navigator.maybePop(context),
@@ -90,7 +91,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Column(
       crossAxisAlignment: .stretch,
       children: [
-        SolidButton(onPressed: () => widget.job.onTap?.call(), child: const Text(StringConstants.startJob)),
+        SolidButton(onPressed: () => widget.job?.onTap?.call(), child: const Text(StringConstants.startJob)),
         const SizedBox(height: 12),
         SolidButton(
           onPressed: () {

@@ -3,11 +3,22 @@ import 'package:dio/dio.dart';
 import 'package:maori_health/core/error/exceptions.dart';
 import 'package:maori_health/core/network/api_endpoints.dart';
 import 'package:maori_health/core/network/dio_client.dart';
-import 'package:maori_health/data/notification/models/notification_model.dart';
+
+import 'package:maori_health/data/notification/models/notification_response_model.dart';
+
+class PaginatedNotificationResponse {
+  final List<NotificationResponseModel> notifications;
+  final int currentPage;
+  final int lastPage;
+
+  const PaginatedNotificationResponse({required this.notifications, required this.currentPage, required this.lastPage});
+
+  bool get hasMore => currentPage < lastPage;
+}
 
 abstract class NotificationRemoteDataSource {
-  Future<List<NotificationModel>> getNotifications();
-  Future<void> markAsRead(int notificationId);
+  Future<PaginatedNotificationResponse> getNotifications({int page = 1});
+  Future<NotificationResponseModel> readNotification(String notificationId);
 }
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
@@ -16,9 +27,9 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   NotificationRemoteDataSourceImpl({required DioClient client}) : _client = client;
 
   @override
-  Future<List<NotificationModel>> getNotifications() async {
+  Future<PaginatedNotificationResponse> getNotifications({int page = 1}) async {
     try {
-      final response = await _client.get(ApiEndpoints.notifications);
+      final response = await _client.get(ApiEndpoints.notifications, queryParameters: {'page': page});
       final body = response.data as Map<String, dynamic>;
       if (body['success'] != true) {
         throw ApiException(
@@ -26,8 +37,15 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
           message: body['message'] as String? ?? 'Failed to fetch notifications',
         );
       }
-      final list = body['data'] as List<dynamic>? ?? [];
-      return list.map((e) => NotificationModel.fromJson(e as Map<String, dynamic>)).toList();
+
+      final paginated = body['data'] as Map<String, dynamic>;
+      final list = paginated['data'] as List<dynamic>? ?? [];
+
+      return PaginatedNotificationResponse(
+        notifications: list.map((e) => NotificationResponseModel.fromJson(e as Map<String, dynamic>)).toList(),
+        currentPage: paginated['current_page'] as int? ?? 1,
+        lastPage: paginated['last_page'] as int? ?? 1,
+      );
     } on DioException catch (e) {
       final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
       throw ApiException(
@@ -38,21 +56,22 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
-  Future<void> markAsRead(int notificationId) async {
+  Future<NotificationResponseModel> readNotification(String notificationId) async {
     try {
-      final response = await _client.post(ApiEndpoints.markNotificationRead(notificationId));
+      final response = await _client.get(ApiEndpoints.readNotification(notificationId));
       final body = response.data as Map<String, dynamic>;
       if (body['success'] != true) {
         throw ApiException(
           statusCode: response.statusCode,
-          message: body['message'] as String? ?? 'Failed to mark notification as read',
+          message: body['message'] as String? ?? 'Failed to retrieve notification',
         );
       }
+      return NotificationResponseModel.fromJson(body['data'] as Map<String, dynamic>);
     } on DioException catch (e) {
       final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
       throw ApiException(
         statusCode: e.response?.statusCode,
-        message: message ?? e.message ?? 'Failed to mark notification as read',
+        message: message ?? e.message ?? 'Failed to retrieve notification',
       );
     }
   }

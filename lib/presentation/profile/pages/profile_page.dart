@@ -28,7 +28,7 @@ class ProfilePage extends StatelessWidget {
         builder: (context, state) {
           final user = state.user;
           if (user == null) {
-            return const Center(child: Text(StringConstants.noData));
+            return const Center(child: Text(StringConstants.noDataFound));
           }
           return _ProfileBody(user: user);
         },

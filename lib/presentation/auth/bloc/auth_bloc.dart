@@ -2,53 +2,79 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/domain/auth/repositories/auth_repository.dart';
+
 import 'package:maori_health/presentation/auth/bloc/auth_event.dart';
 import 'package:maori_health/presentation/auth/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
 
-  AuthBloc({required AuthRepository authRepository}) : _authRepository = authRepository, super(const AuthState()) {
-    on<AuthCheckRequested>(_onCheckRequested);
-    on<AuthLoginRequested>(_onLoginRequested);
-    on<AuthLogoutRequested>(_onLogoutRequested);
+  AuthBloc({required AuthRepository authRepository})
+    : _authRepository = authRepository,
+      super(const AuthLoadingState()) {
+    on<AuthLocalLoginEvent>(_onLocalLoginEvent);
+    on<AuthLoginEvent>(_onLoginEvent);
+    on<AuthLogoutEvent>(_onLogoutEvent);
+    on<AuthChangePasswordEvent>(_onChangePassword);
   }
 
-  Future<void> _onCheckRequested(AuthCheckRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onLocalLoginEvent(AuthLocalLoginEvent event, Emitter<AuthState> emit) async {
     final result = await _authRepository.getLoggedInUser();
-
     await result.fold(
-      onFailure: (_) async {
-        emit(state.copyWith(status: AuthStatus.unauthenticated));
+      onFailure: (_) async => emit(const UnAuthenticatedState()),
+      onSuccess: (user) async => emit(AuthenticatedState(user: user)),
+    );
+  }
+
+  Future<void> _onLoginEvent(AuthLoginEvent event, Emitter<AuthState> emit) async {
+    emit(const AuthLoadingState());
+
+    final result = await _authRepository.login(email: event.email, password: event.password);
+    await result.fold(
+      onFailure: (error) async {
+        emit(AuthErrorState(error.errorMessage ?? StringConstants.somethingWentWrong));
       },
-      onSuccess: (user) async {
-        emit(state.copyWith(status: AuthStatus.authenticated, user: user));
+      onSuccess: (response) async {
+        emit(AuthenticatedState(user: response.user));
       },
     );
   }
 
-  Future<void> _onLoginRequested(AuthLoginRequested event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(status: AuthStatus.loading));
+  Future<void> _onChangePassword(AuthChangePasswordEvent event, Emitter<AuthState> emit) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
 
-    final result = await _authRepository.login(email: event.email, password: event.password);
+    emit(UpdatePassLoadingState());
+
+    final result = await _authRepository.updatePassword(
+      oldPassword: event.oldPassword,
+      newPassword: event.newPassword,
+      confirmPassword: event.confirmPassword,
+    );
 
     await result.fold(
       onFailure: (error) async {
-        emit(
-          state.copyWith(
-            status: AuthStatus.failure,
-            errorMessage: error.errorMessage ?? StringConstants.somethingWentWrong,
-          ),
-        );
+        emit(AuthErrorState(error.errorMessage ?? StringConstants.somethingWentWrong, user: currentUser));
       },
-      onSuccess: (response) async {
-        emit(state.copyWith(status: AuthStatus.authenticated, user: response.user));
+      onSuccess: (message) async {
+        emit(ChangePassSuccessState(user: currentUser, message: message));
+        await Future.delayed(const Duration(milliseconds: 100));
+        emit(AuthenticatedState(user: currentUser));
       },
     );
   }
 
-  Future<void> _onLogoutRequested(AuthLogoutRequested event, Emitter<AuthState> emit) async {
-    await _authRepository.logout();
-    emit(const AuthState(status: AuthStatus.unauthenticated));
+  Future<void> _onLogoutEvent(AuthLogoutEvent event, Emitter<AuthState> emit) async {
+    final currentUser = state.user;
+    emit(const AuthLoadingState());
+
+    final success = await _authRepository.logout();
+    if (success) {
+      emit(const UnAuthenticatedState());
+    } else if (currentUser != null) {
+      emit(AuthenticatedState(user: currentUser));
+    } else {
+      emit(const UnAuthenticatedState());
+    }
   }
 }

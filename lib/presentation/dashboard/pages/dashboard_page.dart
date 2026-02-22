@@ -175,7 +175,7 @@ const _dummyStats = [
   StatsGridItem(value: '02', label: StringConstants.cancelJob),
   StatsGridItem(value: '11', label: StringConstants.completeJob),
   StatsGridItem(value: '13', label: StringConstants.totalClient),
-  StatsGridItem(value: '13H', label: StringConstants.missedTimesheets),
+  StatsGridItem(value: '13H', label: StringConstants.missedTimeSheets),
 ];
 
 const _dummyScheduled = [

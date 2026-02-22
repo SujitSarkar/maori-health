@@ -2,8 +2,9 @@ import 'package:maori_health/core/error/exceptions.dart';
 import 'package:maori_health/core/error/failures.dart';
 import 'package:maori_health/core/network/network_checker.dart';
 import 'package:maori_health/core/result/result.dart';
+
 import 'package:maori_health/data/notification/datasources/notification_remote_data_source.dart';
-import 'package:maori_health/domain/notification/entities/app_notification.dart';
+import 'package:maori_health/domain/notification/entities/notification_response.dart';
 import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
@@ -17,13 +18,13 @@ class NotificationRepositoryImpl implements NotificationRepository {
        _networkChecker = networkChecker;
 
   @override
-  Future<Result<AppError, List<AppNotification>>> getNotifications() async {
+  Future<Result<AppError, PaginatedNotificationResponse>> getNotifications({int page = 1}) async {
     if (!await _networkChecker.hasConnection) {
       return const ErrorResult(NetworkError());
     }
     try {
-      final notifications = await _remoteDataSource.getNotifications();
-      return SuccessResult(notifications);
+      final response = await _remoteDataSource.getNotifications(page: page);
+      return SuccessResult(response);
     } on ApiException catch (e) {
       return ErrorResult(
         ApiError(errorCode: 'FETCH_NOTIFICATIONS_FAILED', errorMessage: e.message, statusCode: e.statusCode),
@@ -34,17 +35,19 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Result<AppError, void>> markAsRead(int notificationId) async {
+  Future<Result<AppError, NotificationResponse>> getNotification(String notificationId) async {
     if (!await _networkChecker.hasConnection) {
       return const ErrorResult(NetworkError());
     }
     try {
-      await _remoteDataSource.markAsRead(notificationId);
-      return const SuccessResult(null);
+      final response = await _remoteDataSource.readNotification(notificationId);
+      return SuccessResult(response);
     } on ApiException catch (e) {
-      return ErrorResult(ApiError(errorCode: 'MARK_READ_FAILED', errorMessage: e.message, statusCode: e.statusCode));
+      return ErrorResult(
+        ApiError(errorCode: 'GET_NOTIFICATION_FAILED', errorMessage: e.message, statusCode: e.statusCode),
+      );
     } catch (e) {
-      return ErrorResult(ApiError(errorCode: 'MARK_READ_FAILED', errorMessage: e.toString()));
+      return ErrorResult(ApiError(errorCode: 'GET_NOTIFICATION_FAILED', errorMessage: e.toString()));
     }
   }
 }

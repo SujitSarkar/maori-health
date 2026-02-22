@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'package:maori_health/core/theme/app_colors.dart';
+import 'package:maori_health/core/utils/extensions.dart';
+import 'package:maori_health/presentation/shared/widgets/app_shimmer.dart';
+
+class TimeSheetShimmer extends StatelessWidget {
+  final int itemCount;
+
+  const TimeSheetShimmer({super.key, this.itemCount = 10});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = context.theme.brightness == Brightness.dark;
+
+    return Shimmer.fromColors(
+      baseColor: isDark ? AppColors.shimmerBaseDark : AppColors.shimmerBaseLight,
+      highlightColor: isDark ? AppColors.shimmerHighlightDark : AppColors.shimmerHighlightLight,
+      child: Column(
+        children: [
+          _buildFilterShimmer(),
+          const SizedBox(height: 16),
+          _buildSummaryShimmer(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: itemCount,
+              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              itemBuilder: (_, _) => const _ShimmerCard(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterShimmer() {
+    return const Row(
+      children: [
+        Expanded(child: AppShimmer.text(width: double.infinity, height: 42)),
+        SizedBox(width: 12),
+        Expanded(flex: 2, child: AppShimmer.text(width: double.infinity, height: 42)),
+      ],
+    );
+  }
+
+  Widget _buildSummaryShimmer() {
+    return const Row(
+      children: [
+        AppShimmer.circular(size: 18),
+        SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppShimmer.text(width: 40, height: 14),
+              SizedBox(height: 4),
+              AppShimmer.text(width: 120, height: 12),
+            ],
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            AppShimmer.text(width: 40, height: 20),
+            SizedBox(height: 4),
+            AppShimmer.text(width: 90, height: 12),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ShimmerCard extends StatelessWidget {
+  const _ShimmerCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.theme.cardColor),
+      ),
+      child: const Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    AppShimmer.text(width: 140, height: 14),
+                    SizedBox(width: 8),
+                    AppShimmer.text(width: 60, height: 20),
+                  ],
+                ),
+                SizedBox(height: 6),
+                AppShimmer.text(width: 160, height: 12),
+                SizedBox(height: 4),
+                AppShimmer.text(width: 50, height: 14),
+              ],
+            ),
+          ),
+          SizedBox(width: 12),
+          AppShimmer.text(width: 30, height: 22),
+        ],
+      ),
+    );
+  }
+}

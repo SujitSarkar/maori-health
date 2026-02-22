@@ -49,7 +49,11 @@ class SettingsPage extends StatelessWidget {
                           title: StringConstants.assets,
                           onTap: () => context.pushNamed(RouteNames.assets),
                         ),
-                        SettingsTile(icon: Icons.access_time_outlined, title: StringConstants.timesheets, onTap: () {}),
+                        SettingsTile(
+                          icon: Icons.access_time_outlined,
+                          title: StringConstants.timeSheets,
+                          onTap: () => context.pushNamed(RouteNames.timeSheets),
+                        ),
                         BlocBuilder<AppBloc, AppState>(
                           builder: (context, state) {
                             final isDark = state.themeMode == ThemeMode.dark;
@@ -91,7 +95,7 @@ class SettingsPage extends StatelessWidget {
                               confirmColor: theme.colorScheme.error,
                             );
                             if (confirmed && context.mounted) {
-                              context.read<AuthBloc>().add(const AuthLogoutRequested());
+                              context.read<AuthBloc>().add(const AuthLogoutEvent());
                             }
                           },
                         ),
