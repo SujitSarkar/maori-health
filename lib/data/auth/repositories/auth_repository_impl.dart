@@ -44,7 +44,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppError, User>> getLoggedInUser() async {
+  Future<Result<AppError, User>> getLocalLogin() async {
     try {
       final isValid = await _localDataSource.isTokenValid();
       if (!isValid) {

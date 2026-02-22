@@ -19,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLocalLoginEvent(AuthLocalLoginEvent event, Emitter<AuthState> emit) async {
-    final result = await _authRepository.getLoggedInUser();
+    final result = await _authRepository.getLocalLogin();
     await result.fold(
       onFailure: (_) async => emit(const UnAuthenticatedState()),
       onSuccess: (user) async => emit(AuthenticatedState(user: user)),

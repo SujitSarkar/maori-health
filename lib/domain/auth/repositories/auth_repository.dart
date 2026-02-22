@@ -6,7 +6,7 @@ import 'package:maori_health/domain/auth/entities/user.dart';
 
 abstract class AuthRepository {
   Future<Result<AppError, LoginResponse>> login({required String email, required String password});
-  Future<Result<AppError, User>> getLoggedInUser();
+  Future<Result<AppError, User>> getLocalLogin();
   Future<Result<AppError, String>> updatePassword({
     required String oldPassword,
     required String newPassword,
