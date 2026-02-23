@@ -15,6 +15,9 @@ abstract class ApiEndpoints {
   static const String notifications = 'notifications';
   static String readNotification(String id) => 'notifications/$id';
 
+  // Dashboard
+  static const String dashboard = 'dashboard';
+
   // TimeSheets
   static const String timeSheets = 'schedules/timesheet';
   static const String employees = 'lookups/employees';

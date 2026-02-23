@@ -1,0 +1,86 @@
+import 'package:equatable/equatable.dart';
+
+class Job extends Equatable {
+  final int id;
+  final int jobListId;
+  final int jobDayId;
+  final int assigneeUserId;
+  final int clientUserId;
+  final int? funderId;
+  final String? scheduleStartTime;
+  final String? scheduleEndTime;
+  final String? workStartTime;
+  final String? workEndTime;
+  final double scheduleTotalTime;
+  final double workTotalTime;
+  final String? day;
+  final String? jobType;
+  final double payHour;
+  final String? travelType;
+  final String? travelTime;
+  final String? travelDistance;
+  final String? visitType;
+  final String? batchCreatedAt;
+  final int isChecked;
+  final String? confirmedAt;
+  final String? confirmedBy;
+  final String? status;
+  final int isHoliday;
+  final String? cancelDateTime;
+  final String? cancelledBy;
+  final String? cancelReason;
+  final String? cancelNote;
+  final int ibtEtApply;
+  final int payableCancelled;
+  final String? cancelRequestedAt;
+  final int? operatorId;
+  final String? color;
+  final List<String> childColors;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
+
+  const Job({
+    required this.id,
+    required this.jobListId,
+    required this.jobDayId,
+    required this.assigneeUserId,
+    required this.clientUserId,
+    this.funderId,
+    this.scheduleStartTime,
+    this.scheduleEndTime,
+    this.workStartTime,
+    this.workEndTime,
+    this.scheduleTotalTime = 0,
+    this.workTotalTime = 0,
+    this.day,
+    this.jobType,
+    this.payHour = 0,
+    this.travelType,
+    this.travelTime,
+    this.travelDistance,
+    this.visitType,
+    this.batchCreatedAt,
+    this.isChecked = 0,
+    this.confirmedAt,
+    this.confirmedBy,
+    this.status,
+    this.isHoliday = 0,
+    this.cancelDateTime,
+    this.cancelledBy,
+    this.cancelReason,
+    this.cancelNote,
+    this.ibtEtApply = 0,
+    this.payableCancelled = 0,
+    this.cancelRequestedAt,
+    this.operatorId,
+    this.color,
+    this.childColors = const [],
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+  });
+
+  @override
+  List<Object?> get props => [id, jobListId, jobDayId];
+}

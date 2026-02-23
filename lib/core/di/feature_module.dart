@@ -26,6 +26,10 @@ import 'package:maori_health/data/timesheet/datasources/timesheet_remote_data_so
 import 'package:maori_health/data/timesheet/repositories/timesheet_repository_impl.dart';
 import 'package:maori_health/domain/timesheet/repositories/timesheet_repository.dart';
 
+import 'package:maori_health/data/dashboard/datasources/dashboard_remote_data_source.dart';
+import 'package:maori_health/data/dashboard/repositories/dashboard_repository_impl.dart';
+import 'package:maori_health/domain/dashboard/repositories/dashboard_repository.dart';
+
 import 'package:maori_health/presentation/app/bloc/app_bloc.dart';
 import 'package:maori_health/presentation/asset/bloc/asset_bloc.dart';
 import 'package:maori_health/presentation/auth/bloc/auth_bloc.dart';
@@ -100,5 +104,13 @@ void registerFeatureModule(GetIt getIt) {
     ..registerFactory<TimeSheetBloc>(() => TimeSheetBloc(repository: getIt<TimeSheetRepository>()));
 
   // ── Dashboard
-  getIt.registerFactory<DashboardBloc>(() => DashboardBloc());
+  getIt
+    ..registerLazySingleton<DashboardRemoteDataSource>(() => DashboardRemoteDataSourceImpl(client: getIt<DioClient>()))
+    ..registerLazySingleton<DashboardRepository>(
+      () => DashboardRepositoryImpl(
+        remoteDataSource: getIt<DashboardRemoteDataSource>(),
+        networkChecker: getIt<NetworkChecker>(),
+      ),
+    )
+    ..registerFactory<DashboardBloc>(() => DashboardBloc(repository: getIt<DashboardRepository>()));
 }

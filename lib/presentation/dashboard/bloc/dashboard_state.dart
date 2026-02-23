@@ -1,17 +1,36 @@
 import 'package:equatable/equatable.dart';
 
-enum DashboardStatus { initial, loading, loaded, failure }
+import 'package:maori_health/domain/dashboard/entities/dashboard_response.dart';
 
-class DashboardState extends Equatable {
-  final DashboardStatus status;
-  final String? errorMessage;
-
-  const DashboardState({this.status = DashboardStatus.initial, this.errorMessage});
-
-  DashboardState copyWith({DashboardStatus? status, String? errorMessage}) {
-    return DashboardState(status: status ?? this.status, errorMessage: errorMessage);
-  }
+sealed class DashboardState extends Equatable {
+  const DashboardState();
 
   @override
-  List<Object?> get props => [status, errorMessage];
+  List<Object?> get props => [];
+}
+
+class DashboardInitialState extends DashboardState {
+  const DashboardInitialState();
+}
+
+class DashboardLoadingState extends DashboardState {
+  const DashboardLoadingState();
+}
+
+class DashboardLoadedState extends DashboardState {
+  final DashboardResponse dashboardData;
+
+  const DashboardLoadedState({required this.dashboardData});
+
+  @override
+  List<Object?> get props => [dashboardData];
+}
+
+class DashboardErrorState extends DashboardState {
+  final String message;
+
+  const DashboardErrorState({required this.message});
+
+  @override
+  List<Object?> get props => [message];
 }

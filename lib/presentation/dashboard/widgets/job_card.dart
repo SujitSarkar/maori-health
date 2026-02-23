@@ -2,32 +2,29 @@ import 'package:flutter/material.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/theme/app_colors.dart';
+import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/utils/extensions.dart';
+import 'package:maori_health/core/utils/dashboard_utils.dart';
+import 'package:maori_health/domain/dashboard/entities/job.dart';
+
 import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
 
 class JobCard extends StatelessWidget {
-  final String date;
-  final String title;
-  final String address;
-  final String? startedAt;
-  final String startTime;
-  final String endTime;
-  final String totalHours;
-  final JobStatus status;
+  final Job job;
   final VoidCallback? onTap;
 
-  const JobCard({
-    super.key,
-    required this.date,
-    required this.title,
-    required this.address,
-    this.startedAt,
-    required this.startTime,
-    required this.endTime,
-    required this.totalHours,
-    required this.status,
-    this.onTap,
-  });
+  const JobCard({super.key, required this.job, this.onTap});
+
+  JobStatus get _status => DashboardUtils.mapJobStatus(job.status);
+
+  String get _date => DateConverter.formatIso(job.scheduleStartTime, pattern: 'EEEE, MMMM d, yyyy');
+  String get _startTime => DateConverter.formatIso(job.scheduleStartTime, pattern: 'h:mm a');
+  String get _endTime => DateConverter.formatIso(job.scheduleEndTime, pattern: 'h:mm a');
+  String get _totalHours => job.scheduleTotalTime.toStringAsFixed(2);
+  String get _title => DashboardUtils.formatJobType(job.jobType);
+  String get _subtitle => 'Job #${job.id}';
+  String? get _workStartedAt =>
+      job.workStartTime != null ? DateConverter.formatIso(job.workStartTime, pattern: 'h:mm a') : null;
 
   @override
   Widget build(BuildContext context) {
@@ -43,29 +40,26 @@ class JobCard extends StatelessWidget {
           border: Border.all(color: AppColors.primary.withAlpha(100)),
         ),
         child: Column(
-          crossAxisAlignment: .start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(date, style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500)),
+                  child: Text(_date, style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500)),
                 ),
-                if (status == JobStatus.started)
+                if (_status == JobStatus.started)
                   Container(
                     width: 12,
                     height: 12,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: status == JobStatus.started ? AppColors.success : Colors.grey,
-                    ),
+                    decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.success),
                   ),
               ],
             ),
             const SizedBox(height: 6),
             Text(
-              title,
+              _title,
               style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -74,11 +68,11 @@ class JobCard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(address, style: textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  child: Text(_subtitle, style: textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
                 ),
-                if (startedAt != null)
+                if (_workStartedAt != null)
                   Text(
-                    '${StringConstants.startedAt} : $startedAt',
+                    '${StringConstants.startedAt} : $_workStartedAt',
                     style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
                   ),
               ],
@@ -86,11 +80,11 @@ class JobCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                _TimeColumn(label: StringConstants.startTime, value: startTime),
+                _TimeColumn(label: StringConstants.startTime, value: _startTime),
                 const SizedBox(width: 24),
-                _TimeColumn(label: StringConstants.endTime, value: endTime),
+                _TimeColumn(label: StringConstants.endTime, value: _endTime),
                 const Spacer(),
-                _TimeColumn(label: StringConstants.totalHours, value: totalHours),
+                _TimeColumn(label: StringConstants.totalHours, value: _totalHours),
               ],
             ),
           ],
@@ -111,7 +105,7 @@ class _TimeColumn extends StatelessWidget {
     final textTheme = context.textTheme;
 
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500)),
         const SizedBox(height: 2),

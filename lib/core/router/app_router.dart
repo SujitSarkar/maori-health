@@ -6,8 +6,8 @@ import 'package:maori_health/domain/asset/entities/asset.dart';
 import 'package:maori_health/presentation/asset/pages/asset_details_page.dart';
 import 'package:maori_health/presentation/asset/pages/assets_page.dart';
 import 'package:maori_health/presentation/auth/pages/login_page.dart';
+import 'package:maori_health/domain/dashboard/entities/job.dart';
 import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
-import 'package:maori_health/presentation/dashboard/widgets/job_carousel.dart';
 import 'package:maori_health/presentation/profile/pages/profile_page.dart';
 import 'package:maori_health/presentation/splash/splash_page.dart';
 import 'package:maori_health/presentation/timesheet/pages/timesheet_page.dart';
@@ -48,7 +48,7 @@ class AppRouter {
           path: RouteNames.jobDetailsPath,
           builder: (context, state) {
             final extra = state.extra;
-            if (extra is JobCarouselItem) {
+            if (extra is Job) {
               return JobDetailsPage(job: extra);
             }
             return JobDetailsPage(jobScheduleId: extra as int?);

@@ -4,77 +4,136 @@ import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/config/assets.dart';
 import 'package:maori_health/core/config/string_constants.dart';
+import 'package:maori_health/core/di/injection.dart';
 import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 
+import 'package:maori_health/domain/dashboard/entities/dashboard_response.dart';
+import 'package:maori_health/domain/dashboard/entities/job.dart';
+import 'package:maori_health/domain/dashboard/entities/stats.dart';
+
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
-import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
+import 'package:maori_health/presentation/dashboard/bloc/bloc.dart';
+import 'package:maori_health/presentation/dashboard/widgets/dashboard_shimmer.dart';
 import 'package:maori_health/presentation/dashboard/widgets/job_card.dart';
 import 'package:maori_health/presentation/dashboard/widgets/job_carousel.dart';
 import 'package:maori_health/presentation/dashboard/widgets/stat_card.dart';
+import 'package:maori_health/presentation/shared/widgets/error_view_widget.dart';
+import 'package:maori_health/presentation/shared/widgets/swipe_refresh_wrapper.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<DashboardBloc>()..add(const DashboardLoadEvent()),
+      child: const _DashboardView(),
+    );
+  }
+}
+
+class _DashboardView extends StatelessWidget {
+  const _DashboardView();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              _buildHeader(context),
-              const SizedBox(height: 20),
+        child: BlocBuilder<DashboardBloc, DashboardState>(
+          builder: (context, state) => switch (state) {
+            DashboardInitialState() || DashboardLoadingState() => const DashboardShimmer(),
+            DashboardErrorState(:final message) => _buildError(context, message),
+            DashboardLoadedState(:final dashboardData) => _buildLoaded(context, dashboardData),
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onRefresh(BuildContext context) async {
+    context.read<DashboardBloc>().add(const DashboardLoadEvent());
+  }
+
+  void _onJobTap(BuildContext context, Job job) {
+    context.pushNamed(RouteNames.jobDetails, extra: job);
+  }
+
+  Widget _buildError(BuildContext context, String message) {
+    return SwipeRefreshWrapper(
+      onRefresh: () => _onRefresh(context),
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(height: context.screenSize.height * 0.3),
+          ErrorViewWidget(message: message, onRetry: () => _onRefresh(context)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoaded(BuildContext context, DashboardResponse dashboardData) {
+    final statsItems = _buildStatsItems(dashboardData.stats);
+
+    return SwipeRefreshWrapper(
+      onRefresh: () => _onRefresh(context),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            const SizedBox(height: 20),
+
+            if (dashboardData.availableJobs.isNotEmpty) ...[
               _buildSectionTitle(context, StringConstants.availableJobs),
               const SizedBox(height: 12),
-              JobCarousel(
-                items: _dummyJobs
-                    .map(
-                      (j) => JobCarouselItem(
-                        date: j.date,
-                        title: j.title,
-                        address: j.address,
-                        startedAt: j.startedAt,
-                        startTime: j.startTime,
-                        endTime: j.endTime,
-                        totalHours: j.totalHours,
-                        status: j.status,
-                        onTap: () => context.pushNamed(RouteNames.jobDetails, extra: j),
-                      ),
-                    )
-                    .toList(),
-              ),
+              JobCarousel(jobs: dashboardData.availableJobs, onJobTap: (job) => _onJobTap(context, job)),
               const SizedBox(height: 24),
-              GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 1.3,
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _dummyStats.length,
-                itemBuilder: (context, index) =>
-                    StatCard(value: _dummyStats[index].value, label: _dummyStats[index].label),
+            ],
+
+            GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1.3,
               ),
-              const SizedBox(height: 24),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: statsItems.length,
+              itemBuilder: (context, index) => StatCard(value: statsItems[index].value, label: statsItems[index].label),
+            ),
+            const SizedBox(height: 24),
+
+            if (dashboardData.currentSchedule != null) ...[
               _buildSectionTitle(context, StringConstants.currentScheduled),
               const SizedBox(height: 12),
-              ..._buildJobList(context, _dummyScheduled),
+              _buildJobCard(context, dashboardData.currentSchedule!),
+              const SizedBox(height: 16),
+            ],
+
+            if (dashboardData.nextSchedule != null) ...[
               _buildSectionTitle(context, StringConstants.nextSchedule),
               const SizedBox(height: 12),
-              ..._buildJobList(context, _dummyScheduled),
+              _buildJobCard(context, dashboardData.nextSchedule!),
+              const SizedBox(height: 16),
+            ],
+
+            if (dashboardData.todaysSchedules.isNotEmpty) ...[
               _buildSectionTitle(context, StringConstants.todaySchedule),
               const SizedBox(height: 12),
-              ..._buildJobList(context, _dummyScheduled),
+              ...dashboardData.todaysSchedules.map((j) => _buildJobCard(context, j)),
+              const SizedBox(height: 16),
+            ],
+
+            if (dashboardData.upcomingSchedules.isNotEmpty) ...[
               _buildSectionTitle(context, StringConstants.upcomingSchedule),
               const SizedBox(height: 12),
-              ..._buildJobList(context, _dummyScheduled),
+              ...dashboardData.upcomingSchedules.map((j) => _buildJobCard(context, j)),
             ],
-          ),
+          ],
         ),
       ),
     );
@@ -91,7 +150,7 @@ class DashboardPage extends StatelessWidget {
           children: [
             Expanded(
               child: Column(
-                crossAxisAlignment: .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Hi, $name', style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 2),
@@ -113,100 +172,24 @@ class DashboardPage extends StatelessWidget {
     return Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold));
   }
 
-  List<Widget> _buildJobList(BuildContext context, List<JobCarouselItem> jobs) {
-    return jobs
-        .map(
-          (job) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: JobCard(
-              date: job.date,
-              title: job.title,
-              address: job.address,
-              startedAt: job.startedAt,
-              startTime: job.startTime,
-              endTime: job.endTime,
-              totalHours: job.totalHours,
-              status: job.status,
-              onTap: () => context.pushNamed(RouteNames.jobDetails, extra: job),
-            ),
-          ),
-        )
-        .toList();
+  Widget _buildJobCard(BuildContext context, Job job) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: JobCard(job: job, onTap: () => _onJobTap(context, job)),
+    );
+  }
+
+  List<StatsGridItem> _buildStatsItems(Stats stats) {
+    return [
+      StatsGridItem(value: '${stats.totalJobs}', label: StringConstants.totalJob),
+      StatsGridItem(value: '${stats.activeJobs}', label: StringConstants.activeJob),
+      StatsGridItem(value: '${stats.cancelledJobs}', label: StringConstants.cancelJob),
+      StatsGridItem(value: '${stats.completedJobs}', label: StringConstants.completeJob),
+      StatsGridItem(value: '${stats.totalClients}', label: StringConstants.totalClient),
+      StatsGridItem(value: '${stats.missedTimesheets}', label: StringConstants.missedTimeSheets),
+    ];
   }
 }
-
-// ── Placeholder data (will be replaced with BLoC-driven data) ──
-final _dummyJobs = [
-  const JobCarouselItem(
-    date: 'Thursday, January 2, 2024',
-    title: 'Personal Care - John Doe is a long title that needs to be truncated',
-    address: '64 Hinerangi St, Turangi',
-    startedAt: '9:10 AM',
-    startTime: '9:00AM',
-    endTime: '11:00AM',
-    totalHours: '2.00',
-    status: JobStatus.accepted,
-  ),
-  const JobCarouselItem(
-    date: 'Friday, January 3, 2024',
-    title: 'Personal Care - Rodrick',
-    address: '12 Lakeside Ave, Taupo',
-    startedAt: '10:00 AM',
-    startTime: '10:00AM',
-    endTime: '12:00PM',
-    totalHours: '2.00',
-    status: JobStatus.accepted,
-  ),
-  const JobCarouselItem(
-    date: 'Friday, January 4, 2024',
-    title: 'Personal Care - Rodrick',
-    address: '12 Lakeside Ave, Taupo',
-    startedAt: '10:00 AM',
-    startTime: '10:00AM',
-    endTime: '12:00PM',
-    totalHours: '2.00',
-    status: JobStatus.accepted,
-  ),
-];
-
-const _dummyStats = [
-  StatsGridItem(value: '22', label: StringConstants.totalJob),
-  StatsGridItem(value: '07', label: StringConstants.activeJob),
-  StatsGridItem(value: '02', label: StringConstants.cancelJob),
-  StatsGridItem(value: '11', label: StringConstants.completeJob),
-  StatsGridItem(value: '13', label: StringConstants.totalClient),
-  StatsGridItem(value: '13H', label: StringConstants.missedTimeSheets),
-];
-
-const _dummyScheduled = [
-  JobCarouselItem(
-    date: 'Thursday, January 2, 2024',
-    title: 'Personal Care - John Doe',
-    address: '64 Hinerangi St, Turangi',
-    startTime: '9:00AM',
-    endTime: '11:00AM',
-    totalHours: '2.00',
-    status: JobStatus.pending,
-  ),
-  JobCarouselItem(
-    date: 'Thursday, January 3, 2024',
-    title: 'Personal Care - John Doe',
-    address: '64 Hinerangi St, Turangi',
-    startTime: '9:00AM',
-    endTime: '11:00AM',
-    totalHours: '2.00',
-    status: JobStatus.accepted,
-  ),
-  JobCarouselItem(
-    date: 'Thursday, January 3, 2024',
-    title: 'Personal Care - John Doe',
-    address: '64 Hinerangi St, Turangi',
-    startTime: '9:00AM',
-    endTime: '11:00AM',
-    totalHours: '2.00',
-    status: JobStatus.started,
-  ),
-];
 
 class StatsGridItem {
   final String value;
