@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/router/route_names.dart';
-import 'package:maori_health/domain/asset/entities/asset.dart';
+import 'package:maori_health/data/asset/models/asset_response_model.dart';
+import 'package:maori_health/domain/dashboard/entities/job.dart';
+
 import 'package:maori_health/presentation/asset/pages/asset_details_page.dart';
 import 'package:maori_health/presentation/asset/pages/assets_page.dart';
 import 'package:maori_health/presentation/auth/pages/login_page.dart';
-import 'package:maori_health/domain/dashboard/entities/job.dart';
 import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
 import 'package:maori_health/presentation/profile/pages/profile_page.dart';
 import 'package:maori_health/presentation/splash/splash_page.dart';
@@ -36,7 +37,7 @@ class AppRouter {
         GoRoute(
           name: RouteNames.assetDetails,
           path: RouteNames.assetDetailsPath,
-          builder: (context, state) => AssetDetailsPage(asset: state.extra! as Asset),
+          builder: (context, state) => AssetDetailsPage(asset: state.extra! as AssetResponseModel),
         ),
         GoRoute(
           name: RouteNames.timeSheets,

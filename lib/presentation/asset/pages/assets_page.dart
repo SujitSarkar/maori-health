@@ -5,21 +5,22 @@ import 'package:go_router/go_router.dart';
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/di/injection.dart';
 import 'package:maori_health/core/router/route_names.dart';
-import 'package:maori_health/domain/asset/entities/asset.dart';
+import 'package:maori_health/core/utils/extensions.dart';
 
 import 'package:maori_health/presentation/asset/bloc/bloc.dart';
-import 'package:maori_health/presentation/asset/widgets/asset_card.dart';
-import 'package:maori_health/presentation/asset/widgets/asset_card_shimmer.dart';
+import 'package:maori_health/presentation/asset/widgets/asset_list_tile.dart';
+import 'package:maori_health/presentation/asset/widgets/asset_page_shimmer.dart';
 import 'package:maori_health/presentation/shared/widgets/common_app_bar.dart';
 import 'package:maori_health/presentation/shared/widgets/error_view_widget.dart';
-import 'package:maori_health/presentation/shared/widgets/no_data_found_widget.dart';
+import 'package:maori_health/presentation/shared/widgets/loading_overlay.dart';
+import 'package:maori_health/presentation/shared/widgets/swipe_refresh_wrapper.dart';
 
 class AssetsPage extends StatelessWidget {
   const AssetsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => getIt<AssetBloc>()..add(const AssetsFetched()), child: const _AssetsView());
+    return BlocProvider(create: (_) => getIt<AssetBloc>()..add(const AssetsLoadEvent()), child: const _AssetsView());
   }
 }
 
@@ -28,41 +29,57 @@ class _AssetsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar(context: context, title: Text(StringConstants.assets)),
-      body: BlocBuilder<AssetBloc, AssetState>(
-        builder: (context, state) {
-          return switch (state.status) {
-            AssetPageStatus.initial || AssetPageStatus.loading => const AssetCardShimmer(),
-            AssetPageStatus.error => ErrorViewWidget(
-              message: state.errorMessage ?? StringConstants.somethingWentWrong,
-              onRetry: () => context.read<AssetBloc>().add(const AssetsFetched()),
-            ),
-            AssetPageStatus.loaded =>
-              state.assets.isEmpty
-                  ? const NoDataFoundWidget(message: StringConstants.noDataFound)
-                  : _buildAssetList(context, state.assets),
-          };
-        },
+    return BlocListener<AssetBloc, AssetState>(
+      listener: (context, state) {
+        if (state is AssetAcceptedState) {
+          context.showSnackBar(StringConstants.assetAccepted);
+        } else if (state is AssetErrorState) {
+          context.showSnackBar(state.message, isError: true);
+        }
+      },
+      child: Scaffold(
+        appBar: CommonAppBar(context: context, title: Text(StringConstants.assets)),
+        body: BlocBuilder<AssetBloc, AssetState>(
+          builder: (context, state) {
+            if (state is AssetInitialState || state is AssetLoadingState) {
+              return const AssetPageShimmer();
+            } else if (state is AssetLoadedState || state is AssetAcceptLoadingState) {
+              final loadedState = state as AssetLoadedState;
+              return loadedState.assets.isEmpty
+                  ? ErrorViewWidget(
+                      message: StringConstants.noDataFound,
+                      onRetry: () async => context.read<AssetBloc>().add(const AssetsLoadEvent()),
+                    )
+                  : LoadingOverlay(
+                      isLoading: state is AssetAcceptLoadingState,
+                      child: _buildAssetList(context, loadedState, state is AssetAcceptLoadingState),
+                    );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildAssetList(BuildContext context, List<Asset> assets) {
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      itemCount: assets.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 14),
-      itemBuilder: (_, index) {
-        final asset = assets[index];
-        return AssetCard(
-          asset: asset,
-          onView: () => context.pushNamed(RouteNames.assetDetails, extra: asset),
-          onAccept: asset.status == AssetStatus.pending
-              ? () => context.read<AssetBloc>().add(AssetAccepted(asset.id))
-              : null,
-        );
-      },
+  Widget _buildAssetList(BuildContext context, AssetLoadedState state, bool isAccepting) {
+    final assets = state.assets;
+    return SwipeRefreshWrapper(
+      onRefresh: () async => context.read<AssetBloc>().add(const AssetsLoadEvent()),
+      child: ListView.separated(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        itemCount: assets.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 14),
+        itemBuilder: (context, index) {
+          final asset = assets[index];
+          return AssetListTile(
+            asset: asset,
+            onView: () => context.pushNamed(RouteNames.assetDetails, extra: asset),
+            onAccept: isAccepting ? null : () => context.read<AssetBloc>().add(AssetAcceptEvent(asset.asset.id!)),
+          );
+        },
+      ),
     );
   }
 }

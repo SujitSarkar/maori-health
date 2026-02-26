@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/theme/app_colors.dart';
+import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/utils/extensions.dart';
-import 'package:maori_health/domain/asset/entities/asset.dart';
-import 'package:maori_health/presentation/asset/utils/asset_utils.dart';
+
+import 'package:maori_health/data/asset/models/asset_response_model.dart';
+
+import 'package:maori_health/core/utils/asset_utils.dart';
 import 'package:maori_health/presentation/shared/widgets/solid_button.dart';
 
-class AssetCard extends StatelessWidget {
-  final Asset asset;
+class AssetListTile extends StatelessWidget {
+  final AssetResponseModel asset;
   final VoidCallback? onView;
   final VoidCallback? onAccept;
 
-  const AssetCard({super.key, required this.asset, this.onView, this.onAccept});
+  const AssetListTile({super.key, required this.asset, this.onView, this.onAccept});
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +33,22 @@ class AssetCard extends StatelessWidget {
         children: [
           _buildHeader(context, textTheme),
           const SizedBox(height: 12),
-          _buildInfoRow(context, icon: Icons.tag, label: StringConstants.id, value: '${asset.id}'),
+          _buildInfoRow(context, icon: Icons.tag, label: StringConstants.id, value: '${asset.asset.id}'),
           const SizedBox(height: 10),
           _buildInfoRow(
             context,
             icon: Icons.calendar_today_outlined,
             label: StringConstants.assignmentDate,
-            value: asset.assignmentDate ?? StringConstants.na,
+            value: DateConverter.formatDate(asset.asset.assignedDate!),
           ),
           const SizedBox(height: 10),
           _buildInfoRow(
             context,
             icon: Icons.calendar_today_outlined,
             label: StringConstants.acknowledgementStatus,
-            value: asset.acknowledgementStatus ?? StringConstants.na,
+            value: AssetUtils.isAcknowledged(asset.asset.acknowledgementStatus ?? 0)
+                ? StringConstants.accepted
+                : StringConstants.pending,
           ),
           const SizedBox(height: 14),
           _buildActions(context),
@@ -54,7 +59,7 @@ class AssetCard extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, TextTheme textTheme) {
     return Row(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: .center,
       children: [
         Container(
           padding: const EdgeInsets.all(8),
@@ -67,14 +72,14 @@ class AssetCard extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: Text(
-            asset.name,
+            asset.stock.uniqueId ?? StringConstants.na,
             style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         const SizedBox(width: 8),
-        _StatusBadge(status: asset.status),
+        _StatusBadge(acknowledgementStatus: asset.asset.acknowledgementStatus),
       ],
     );
   }
@@ -93,7 +98,7 @@ class AssetCard extends StatelessWidget {
   }
 
   Widget _buildActions(BuildContext context) {
-    if (asset.status == AssetStatus.pending) {
+    if (!AssetUtils.isAcknowledged(asset.asset.acknowledgementStatus ?? 0)) {
       return Row(
         children: [
           Expanded(
@@ -145,15 +150,16 @@ class AssetCard extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  final AssetStatus status;
+  final int? acknowledgementStatus;
 
-  const _StatusBadge({required this.status});
+  const _StatusBadge({required this.acknowledgementStatus});
 
   @override
   Widget build(BuildContext context) {
-    final label = AssetUtils.statusLabel(status);
-    final fgColor = AssetUtils.statusColor(status);
-    final bgColor = AssetUtils.statusBackgroundColor(status, context);
+    final ackStatus = acknowledgementStatus ?? 0;
+    final label = AssetUtils.statusLabel(ackStatus);
+    final fgColor = AssetUtils.statusColor(ackStatus);
+    final bgColor = AssetUtils.statusBackgroundColor(ackStatus, context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

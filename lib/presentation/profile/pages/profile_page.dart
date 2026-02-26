@@ -106,7 +106,7 @@ class _ProfileBody extends StatelessWidget {
         ProfileInfoTile(
           icon: Icons.calendar_today_outlined,
           label: StringConstants.joinedDate,
-          value: DateConverter.formatIso(user.createdAt),
+          value: DateConverter.formatIsoDateTime(user.createdAt),
         ),
       ],
     );

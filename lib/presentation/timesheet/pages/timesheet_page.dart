@@ -169,7 +169,7 @@ class _FilterRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasDateRange = startDate != null && endDate != null;
     final dateRangeText = hasDateRange
-        ? '${DateConverter.format(startDate!)} - ${DateConverter.format(endDate!)}'
+        ? '${DateConverter.formatDate(startDate!)} - ${DateConverter.formatDate(endDate!)}'
         : StringConstants.selectDateRange;
 
     return Row(

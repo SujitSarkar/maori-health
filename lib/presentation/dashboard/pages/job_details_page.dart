@@ -34,16 +34,16 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               _buildHeader(context),
               const SizedBox(height: 16),
               JobDetailsInfoCard(
-                date: DateConverter.formatIso(widget.job?.scheduleStartTime, pattern: 'dd-MM-yyyy'),
+                date: DateConverter.formatIsoDateTime(widget.job?.scheduleStartTime),
                 jobType: DashboardUtils.formatJobType(widget.job?.jobType),
                 clientName: '-',
                 clientAddress: 'Job #${widget.job?.id ?? '-'}',
                 duration: widget.job?.scheduleTotalTime.toStringAsFixed(2) ?? '-',
-                startTime: DateConverter.formatIso(widget.job?.scheduleStartTime, pattern: 'h:mm a'),
-                endTime: DateConverter.formatIso(widget.job?.scheduleEndTime, pattern: 'h:mm a'),
+                startTime: DateConverter.formatIsoDateTime(widget.job?.scheduleStartTime, pattern: 'h:mm a'),
+                endTime: DateConverter.formatIsoDateTime(widget.job?.scheduleEndTime, pattern: 'h:mm a'),
                 status: DashboardUtils.mapJobStatus(widget.job?.status),
                 jobStartedTime: widget.job?.workStartTime != null
-                    ? DateConverter.formatIso(widget.job!.workStartTime, pattern: 'h:mm a')
+                    ? DateConverter.formatIsoDateTime(widget.job!.workStartTime, pattern: 'h:mm a')
                     : null,
               ),
               const SizedBox(height: 24),

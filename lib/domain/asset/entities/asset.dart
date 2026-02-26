@@ -1,46 +1,57 @@
 import 'package:equatable/equatable.dart';
 
-enum AssetStatus { pending, accepted, returned }
-
 class Asset extends Equatable {
-  final int id;
-  final String name;
-  final String? category;
-  final AssetStatus status;
-  final String? assignmentDate;
-  final String? acknowledgementStatus;
-  final String? operatorName;
-  final String? acknowledgementBy;
-  final String? acknowledgementAt;
-  final String? description;
-  final String? attachmentUrl;
+  final int? id;
+  final int? userId;
+  final int? stockId;
+  final int? assignId;
+  final int? quantity;
+  final DateTime? assignedDate;
+  final String? status;
+  final String? actionStatus;
+  final int? acknowledgementStatus;
+  final int? operatorId;
+  final DateTime? receivedAt;
+  final String? receivedBy;
+  final String? note;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final DateTime? deletedAt;
 
   const Asset({
-    required this.id,
-    required this.name,
-    this.category,
-    required this.status,
-    this.assignmentDate,
+    this.id,
+    this.userId,
+    this.stockId,
+    this.assignId,
+    this.quantity,
+    this.assignedDate,
+    this.status,
+    this.actionStatus,
     this.acknowledgementStatus,
-    this.operatorName,
-    this.acknowledgementBy,
-    this.acknowledgementAt,
-    this.description,
-    this.attachmentUrl,
+    this.operatorId,
+    this.receivedAt,
+    this.receivedBy,
+    this.note,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
   });
 
   @override
   List<Object?> get props => [
     id,
-    name,
-    category,
+    userId,
+    stockId,
+    quantity,
+    assignedDate,
     status,
-    assignmentDate,
     acknowledgementStatus,
-    operatorName,
-    acknowledgementBy,
-    acknowledgementAt,
-    description,
-    attachmentUrl,
+    operatorId,
+    receivedAt,
+    receivedBy,
+    note,
+    createdAt,
+    updatedAt,
+    deletedAt,
   ];
 }

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
-import 'package:maori_health/core/theme/app_colors.dart';
+import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/utils/extensions.dart';
-import 'package:maori_health/domain/asset/entities/asset.dart';
+import 'package:maori_health/data/asset/models/asset_response_model.dart';
 
-import 'package:maori_health/presentation/asset/utils/asset_utils.dart';
+import 'package:maori_health/core/utils/asset_utils.dart';
 import 'package:maori_health/presentation/shared/widgets/common_app_bar.dart';
 
 class AssetDetailsPage extends StatelessWidget {
-  final Asset asset;
+  final AssetResponseModel asset;
 
   const AssetDetailsPage({super.key, required this.asset});
 
@@ -49,51 +50,54 @@ class AssetDetailsPage extends StatelessWidget {
         crossAxisAlignment: .start,
         children: [
           _InfoRow(
-            label: '${StringConstants.aid} : ',
-            value: '${asset.id}',
+            label: '${StringConstants.aid}: ',
+            value: '${asset.asset.id}',
             labelStyle: labelStyle,
             valueStyle: valueStyle,
           ),
           const SizedBox(height: 8),
           _InfoRow(
-            label: '${StringConstants.statusLabel} :',
-            value: AssetUtils.statusLabel(asset.status),
+            label: '${StringConstants.statusLabel}: ',
+            value: AssetUtils.statusLabel(asset.asset.acknowledgementStatus ?? 0),
             labelStyle: labelStyle,
-            valueStyle: valueStyle?.copyWith(color: AssetUtils.statusColor(asset.status)),
+            valueStyle: valueStyle?.copyWith(color: AssetUtils.statusColor(asset.asset.acknowledgementStatus ?? 0)),
           ),
           const SizedBox(height: 8),
           _InfoRow(
-            label: '${StringConstants.product} :',
-            value: asset.name,
+            label: '${StringConstants.product}: ',
+            value: asset.stock.uniqueId ?? StringConstants.na,
             labelStyle: labelStyle,
             valueStyle: valueStyle,
           ),
           const SizedBox(height: 8),
           _InfoRow(
-            label: '${StringConstants.assignDate} : ',
-            value: asset.assignmentDate ?? StringConstants.na,
+            label: '${StringConstants.assignDate}: ',
+            value: DateConverter.formatDate(asset.asset.assignedDate!),
             labelStyle: labelStyle,
             valueStyle: valueStyle,
           ),
           const SizedBox(height: 8),
           _InfoRow(
-            label: '${StringConstants.operator} : ',
-            value: asset.operatorName ?? StringConstants.na,
+            label: '${StringConstants.operator}: ',
+            value: asset.user.fullName ?? StringConstants.na,
             labelStyle: labelStyle,
             valueStyle: valueStyle,
           ),
           const SizedBox(height: 8),
           _InfoRow(
-            label: '${StringConstants.acknowledgement} : ',
-            value: asset.acknowledgementBy ?? StringConstants.na,
+            label: '${StringConstants.acknowledgement}: ',
+            value: asset.receivedBy?.fullName ?? StringConstants.na,
             labelStyle: labelStyle,
             valueStyle: valueStyle,
           ),
-          if (asset.acknowledgementAt != null) ...[
+          if (asset.asset.receivedAt != null) ...[
             const SizedBox(height: 8),
-            Text(
-              '${StringConstants.at} : ${asset.acknowledgementAt}',
-              style: textTheme.bodyMedium?.copyWith(color: AppColors.error, fontWeight: FontWeight.w500),
+
+            _InfoRow(
+              label: '${StringConstants.at}: ',
+              value: DateConverter.formatDateTime(asset.asset.receivedAt!),
+              labelStyle: labelStyle,
+              valueStyle: valueStyle,
             ),
           ],
         ],
@@ -110,7 +114,7 @@ class AssetDetailsPage extends StatelessWidget {
         Text(StringConstants.description, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Text(
-          asset.description ?? StringConstants.na,
+          asset.asset.note ?? StringConstants.na,
           style: textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
         ),
       ],
@@ -125,15 +129,13 @@ class AssetDetailsPage extends StatelessWidget {
       children: [
         Text(StringConstants.attachment, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
-        asset.attachmentUrl != null
+        asset.stock.status != null
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  asset.attachmentUrl!,
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildAttachmentPlaceholder(context),
+                child: CachedNetworkImage(
+                  imageUrl: asset.stock.status ?? '',
+                  placeholder: (context, url) => _buildAttachmentPlaceholder(context),
+                  errorWidget: (context, url, error) => _buildAttachmentPlaceholder(context),
                 ),
               )
             : _buildAttachmentPlaceholder(context),

@@ -7,14 +7,14 @@ abstract class AssetEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class AssetsFetched extends AssetEvent {
-  const AssetsFetched();
+class AssetsLoadEvent extends AssetEvent {
+  const AssetsLoadEvent();
 }
 
-class AssetAccepted extends AssetEvent {
+class AssetAcceptEvent extends AssetEvent {
   final int assetId;
 
-  const AssetAccepted(this.assetId);
+  const AssetAcceptEvent(this.assetId);
 
   @override
   List<Object?> get props => [assetId];

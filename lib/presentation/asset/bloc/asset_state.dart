@@ -1,20 +1,41 @@
 import 'package:equatable/equatable.dart';
+import 'package:maori_health/data/asset/models/asset_response_model.dart';
 
-import 'package:maori_health/domain/asset/entities/asset.dart';
-
-enum AssetPageStatus { initial, loading, loaded, error }
-
-class AssetState extends Equatable {
-  final AssetPageStatus status;
-  final List<Asset> assets;
-  final String? errorMessage;
-
-  const AssetState({this.status = AssetPageStatus.initial, this.assets = const [], this.errorMessage});
-
-  AssetState copyWith({AssetPageStatus? status, List<Asset>? assets, String? errorMessage}) {
-    return AssetState(status: status ?? this.status, assets: assets ?? this.assets, errorMessage: errorMessage);
-  }
+sealed class AssetState extends Equatable {
+  const AssetState();
 
   @override
-  List<Object?> get props => [status, assets, errorMessage];
+  List<Object?> get props => [];
+}
+
+class AssetInitialState extends AssetState {
+  const AssetInitialState();
+}
+
+class AssetLoadingState extends AssetState {
+  const AssetLoadingState();
+}
+
+class AssetLoadedState extends AssetState {
+  final List<AssetResponseModel> assets;
+
+  const AssetLoadedState(this.assets);
+
+  @override
+  List<Object?> get props => [assets];
+}
+
+class AssetAcceptLoadingState extends AssetLoadedState {
+  const AssetAcceptLoadingState(super.assets);
+}
+
+class AssetAcceptedState extends AssetState {}
+
+class AssetErrorState extends AssetState {
+  final String message;
+
+  const AssetErrorState(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

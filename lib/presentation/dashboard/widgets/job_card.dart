@@ -17,14 +17,14 @@ class JobCard extends StatelessWidget {
 
   JobStatus get _status => DashboardUtils.mapJobStatus(job.status);
 
-  String get _date => DateConverter.formatIso(job.scheduleStartTime, pattern: 'EEEE, MMMM d, yyyy');
-  String get _startTime => DateConverter.formatIso(job.scheduleStartTime, pattern: 'h:mm a');
-  String get _endTime => DateConverter.formatIso(job.scheduleEndTime, pattern: 'h:mm a');
+  String get _date => DateConverter.formatIsoDateTime(job.scheduleStartTime, pattern: 'EEEE, MMMM d, yyyy');
+  String get _startTime => DateConverter.formatIsoDateTime(job.scheduleStartTime, pattern: 'h:mm a');
+  String get _endTime => DateConverter.formatIsoDateTime(job.scheduleEndTime, pattern: 'h:mm a');
   String get _totalHours => job.scheduleTotalTime.toStringAsFixed(2);
   String get _title => DashboardUtils.formatJobType(job.jobType);
   String get _subtitle => 'Job #${job.id}';
   String? get _workStartedAt =>
-      job.workStartTime != null ? DateConverter.formatIso(job.workStartTime, pattern: 'h:mm a') : null;
+      job.workStartTime != null ? DateConverter.formatIsoDateTime(job.workStartTime, pattern: 'h:mm a') : null;
 
   @override
   Widget build(BuildContext context) {

@@ -2,8 +2,9 @@ import 'package:maori_health/core/error/exceptions.dart';
 import 'package:maori_health/core/error/failures.dart';
 import 'package:maori_health/core/network/network_checker.dart';
 import 'package:maori_health/core/result/result.dart';
+
 import 'package:maori_health/data/asset/datasources/asset_remote_data_source.dart';
-import 'package:maori_health/domain/asset/entities/asset.dart';
+import 'package:maori_health/data/asset/models/asset_response_model.dart';
 import 'package:maori_health/domain/asset/repositories/asset_repository.dart';
 
 class AssetRepositoryImpl implements AssetRepository {
@@ -15,7 +16,7 @@ class AssetRepositoryImpl implements AssetRepository {
       _networkChecker = networkChecker;
 
   @override
-  Future<Result<AppError, List<Asset>>> getAssets() async {
+  Future<Result<AppError, List<AssetResponseModel>>> getAssets() async {
     if (!await _networkChecker.hasConnection) {
       return const ErrorResult(NetworkError());
     }
@@ -30,7 +31,7 @@ class AssetRepositoryImpl implements AssetRepository {
   }
 
   @override
-  Future<Result<AppError, Asset>> acceptAsset(int assetId) async {
+  Future<Result<AppError, AssetResponseModel>> acceptAsset(int assetId) async {
     if (!await _networkChecker.hasConnection) {
       return const ErrorResult(NetworkError());
     }

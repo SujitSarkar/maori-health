@@ -100,6 +100,7 @@ abstract class StringConstants {
   static const String description = 'Description';
   static const String attachment = 'Attachment';
   static const String noAttachment = 'No attachment';
+  static const String assetAccepted = 'Asset accepted';
 
   // TimeSheet
   static const String appointments = 'Appointments';

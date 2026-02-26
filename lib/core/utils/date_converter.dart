@@ -2,25 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 abstract class DateConverter {
-  static final _defaultFormat = DateFormat('dd-MM-yyyy');
+  static String formatDate(DateTime date) => DateFormat('dd-MM-yyyy').format(date);
 
-  static String format(DateTime date, {DateFormat? formatter}) {
-    return (formatter ?? _defaultFormat).format(date);
-  }
+  static String formatDateTime(DateTime date) => DateFormat('dd-MM-yyyy | h:mm a').format(date);
 
-  static DateTime? parse(String date, {DateFormat? formatter}) {
-    try {
-      return (formatter ?? _defaultFormat).parseStrict(date);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  static String toDisplay(DateTime date) => DateFormat('dd-MM-yyyy').format(date);
-
-  static String toIso(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
-
-  static String toFullDisplay(DateTime date) => DateFormat('dd MMM yyyy, EEEE').format(date);
+  static String toIsoDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
 
   static String toWeekdayDate(DateTime date) => DateFormat('EEEE, dd MMM').format(date);
 
@@ -58,7 +44,7 @@ abstract class DateConverter {
     return DateFormat('dd-MM-yyyy').format(dateTime);
   }
 
-  static String formatIso(String? isoDate, {String pattern = 'dd-MM-yyyy | h:mm a'}) {
+  static String formatIsoDateTime(String? isoDate, {String pattern = 'dd-MM-yyyy | h:mm a'}) {
     if (isoDate == null || isoDate.isEmpty) return '-';
     try {
       final dt = DateTime.parse(isoDate);

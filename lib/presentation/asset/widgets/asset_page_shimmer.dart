@@ -6,10 +6,10 @@ import 'package:maori_health/core/utils/extensions.dart';
 
 import 'package:maori_health/presentation/shared/widgets/app_shimmer.dart';
 
-class AssetCardShimmer extends StatelessWidget {
+class AssetPageShimmer extends StatelessWidget {
   final int itemCount;
 
-  const AssetCardShimmer({super.key, this.itemCount = 3});
+  const AssetPageShimmer({super.key, this.itemCount = 3});
 
   @override
   Widget build(BuildContext context) {

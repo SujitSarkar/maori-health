@@ -27,8 +27,8 @@ class TimeSheetRepositoryImpl implements TimeSheetRepository {
     try {
       final response = await _remoteDataSource.getTimeSheets(
         clientUserId: clientUserId,
-        startDate: startDate != null ? DateConverter.toIso(startDate) : null,
-        endDate: endDate != null ? DateConverter.toIso(endDate) : null,
+        startDate: startDate != null ? DateConverter.toIsoDate(startDate) : null,
+        endDate: endDate != null ? DateConverter.toIsoDate(endDate) : null,
         page: page,
       );
       return SuccessResult(response);
