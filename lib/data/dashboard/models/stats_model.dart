@@ -1,4 +1,5 @@
 import 'package:maori_health/domain/dashboard/entities/stats.dart';
+import 'package:maori_health/core/utils/data_parse_util.dart';
 
 class StatsModel extends Stats {
   const StatsModel({
@@ -12,12 +13,12 @@ class StatsModel extends Stats {
 
   factory StatsModel.fromJson(Map<String, dynamic> json) {
     return StatsModel(
-      totalJobs: json['total_jobs'] as int? ?? 0,
-      completedJobs: json['completed_jobs'] as int? ?? 0,
-      cancelledJobs: json['cancelled_jobs'] as int? ?? 0,
-      activeJobs: json['active_jobs'] as int? ?? 0,
-      totalClients: json['total_clients'] as int? ?? 0,
-      missedTimesheets: json['missed_timesheets'] as int? ?? 0,
+      totalJobs: DataParseUtil.parseInt(json['total_jobs']),
+      completedJobs: DataParseUtil.parseInt(json['completed_jobs']),
+      cancelledJobs: DataParseUtil.parseInt(json['cancelled_jobs']),
+      activeJobs: DataParseUtil.parseInt(json['active_jobs']),
+      totalClients: DataParseUtil.parseInt(json['total_clients']),
+      missedTimesheets: DataParseUtil.parseInt(json['missed_timesheets']),
     );
   }
 

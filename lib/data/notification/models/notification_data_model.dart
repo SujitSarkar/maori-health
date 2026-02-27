@@ -1,4 +1,5 @@
 import 'package:maori_health/domain/notification/entities/notification_data.dart';
+import 'package:maori_health/core/utils/data_parse_util.dart';
 
 class NotificationDataModel extends NotificationData {
   const NotificationDataModel({
@@ -12,12 +13,12 @@ class NotificationDataModel extends NotificationData {
 
   factory NotificationDataModel.fromJson(Map<String, dynamic> json) {
     return NotificationDataModel(
-      jobScheduleId: json['job_schedule_id'] as int?,
-      assignTo: json['assign_to'] as int?,
-      assignedAt: json['assigned_at'] as String?,
-      assignedBy: json['assigned_by'] as int?,
-      title: json['title'] as String?,
-      message: json['message'] as String?,
+      jobScheduleId: DataParseUtil.parseInt(json['job_schedule_id']),
+      assignTo: DataParseUtil.parseInt(json['assign_to']),
+      assignedAt: json['assigned_at']?.toString(),
+      assignedBy: DataParseUtil.parseInt(json['assigned_by']),
+      title: json['title']?.toString(),
+      message: json['message']?.toString(),
     );
   }
 }

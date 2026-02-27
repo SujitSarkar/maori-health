@@ -34,7 +34,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       if (body['success'] != true) {
         throw ApiException(
           statusCode: response.statusCode,
-          message: body['message'] as String? ?? 'Failed to fetch notifications',
+          message: body['message']?.toString() ?? 'Failed to fetch notifications',
         );
       }
 
@@ -47,7 +47,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
         lastPage: paginated['last_page'] as int? ?? 1,
       );
     } on DioException catch (e) {
-      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
+      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
       throw ApiException(
         statusCode: e.response?.statusCode,
         message: message ?? e.message ?? 'Failed to fetch notifications',
@@ -63,12 +63,12 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       if (body['success'] != true) {
         throw ApiException(
           statusCode: response.statusCode,
-          message: body['message'] as String? ?? 'Failed to retrieve notification',
+          message: body['message']?.toString() ?? 'Failed to retrieve notification',
         );
       }
       return NotificationResponseModel.fromJson(body['data'] as Map<String, dynamic>);
     } on DioException catch (e) {
-      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
+      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
       throw ApiException(
         statusCode: e.response?.statusCode,
         message: message ?? e.message ?? 'Failed to retrieve notification',

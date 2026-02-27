@@ -23,14 +23,14 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
       if (body['success'] != true) {
         throw ApiException(
           statusCode: response.statusCode,
-          message: body['message'] as String? ?? 'Failed to fetch dashboard data',
+          message: body['message']?.toString() ?? 'Failed to fetch dashboard data',
         );
       }
 
       final data = body['data'] as Map<String, dynamic>;
       return DashboardResponseModel.fromJson(data);
     } on DioException catch (e) {
-      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
+      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
       throw ApiException(
         statusCode: e.response?.statusCode,
         message: message ?? e.message ?? 'Failed to fetch dashboard data',

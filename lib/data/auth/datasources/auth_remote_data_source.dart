@@ -31,12 +31,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final body = response.data as Map<String, dynamic>;
 
       if (body['success'] != true) {
-        throw ApiException(statusCode: response.statusCode, message: body['message'] as String? ?? 'Login failed');
+        throw ApiException(statusCode: response.statusCode, message: body['message']?.toString() ?? 'Login failed');
       }
 
       return LoginResponseModel.fromJson(body);
     } on DioException catch (e) {
-      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
+      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
       throw ApiException(statusCode: e.response?.statusCode, message: message ?? e.message ?? 'Login failed');
     }
   }
@@ -71,12 +71,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (body['success'] != true) {
         throw ApiException(
           statusCode: response.statusCode,
-          message: body['message'] as String? ?? 'Failed to update password',
+          message: body['message']?.toString() ?? 'Failed to update password',
         );
       }
-      return body['message'] as String? ?? 'Password updated successfully';
+      return body['message']?.toString() ?? 'Password updated successfully';
     } on DioException catch (e) {
-      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message'] as String? : null;
+      final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
       throw ApiException(
         statusCode: e.response?.statusCode,
         message: message ?? e.message ?? 'Failed to update password',
