@@ -9,7 +9,7 @@ import 'package:maori_health/presentation/shared/widgets/app_shimmer.dart';
 class AssetPageShimmer extends StatelessWidget {
   final int itemCount;
 
-  const AssetPageShimmer({super.key, this.itemCount = 3});
+  const AssetPageShimmer({super.key, this.itemCount = 8});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class AssetPageShimmer extends StatelessWidget {
       baseColor: isDark ? AppColors.shimmerBaseDark : AppColors.shimmerBaseLight,
       highlightColor: isDark ? AppColors.shimmerHighlightDark : AppColors.shimmerHighlightLight,
       child: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        padding: const .fromLTRB(16, 8, 16, 16),
         physics: const NeverScrollableScrollPhysics(),
         itemCount: itemCount,
         separatorBuilder: (_, _) => const SizedBox(height: 14),
@@ -35,10 +35,10 @@ class _ShimmerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const .all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: context.theme.cardColor),
+        borderRadius: .circular(14),
+        border: .all(color: context.theme.cardColor),
       ),
       child: const Column(
         crossAxisAlignment: .start,

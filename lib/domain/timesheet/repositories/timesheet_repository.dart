@@ -1,9 +1,9 @@
 import 'package:maori_health/core/error/failures.dart';
 import 'package:maori_health/core/result/result.dart';
-import 'package:maori_health/data/timesheet/datasources/timesheet_remote_data_source.dart';
+import 'package:maori_health/data/timesheet/models/timesheet_response_model.dart';
 
 abstract class TimeSheetRepository {
-  Future<Result<AppError, TimeSheetResponse>> getTimeSheets({
+  Future<Result<AppError, TimesheetResponseModel>> getTimeSheets({
     int? clientUserId,
     DateTime? startDate,
     DateTime? endDate,

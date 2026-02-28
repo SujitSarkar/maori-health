@@ -13,7 +13,7 @@ class EmployeeTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
-      title: Text(employee.fullName, style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+      title: Text(employee.fullName, style: context.textTheme.bodyMedium?.copyWith(fontWeight: .w600)),
       subtitle: Text(
         employee.location ?? employee.userType,
         style: context.textTheme.bodySmall?.copyWith(color: context.theme.hintColor),

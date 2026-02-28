@@ -4,6 +4,7 @@ import 'package:maori_health/core/network/network_checker.dart';
 import 'package:maori_health/core/result/result.dart';
 import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/data/timesheet/datasources/timesheet_remote_data_source.dart';
+import 'package:maori_health/data/timesheet/models/timesheet_response_model.dart';
 import 'package:maori_health/domain/timesheet/repositories/timesheet_repository.dart';
 
 class TimeSheetRepositoryImpl implements TimeSheetRepository {
@@ -15,7 +16,7 @@ class TimeSheetRepositoryImpl implements TimeSheetRepository {
       _networkChecker = networkChecker;
 
   @override
-  Future<Result<AppError, TimeSheetResponse>> getTimeSheets({
+  Future<Result<AppError, TimesheetResponseModel>> getTimeSheets({
     int? clientUserId,
     DateTime? startDate,
     DateTime? endDate,

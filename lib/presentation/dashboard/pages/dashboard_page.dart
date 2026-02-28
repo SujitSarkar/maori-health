@@ -79,9 +79,9 @@ class _DashboardView extends StatelessWidget {
       onRefresh: () => _onRefresh(context),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        padding: const .fromLTRB(16, 16, 16, 24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             _buildHeader(context),
             const SizedBox(height: 20),
@@ -150,9 +150,9 @@ class _DashboardView extends StatelessWidget {
           children: [
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
-                  Text('Hi, $name', style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+                  Text('Hi, $name', style: textTheme.headlineSmall?.copyWith(fontWeight: .bold)),
                   const SizedBox(height: 2),
                   Text(
                     StringConstants.welcomeTo,
@@ -169,12 +169,12 @@ class _DashboardView extends StatelessWidget {
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
-    return Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold));
+    return Text(title, style: context.textTheme.titleLarge?.copyWith(fontWeight: .bold));
   }
 
   Widget _buildJobCard(BuildContext context, Job job) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const .only(bottom: 12),
       child: JobCard(job: job, onTap: () => _onJobTap(context, job)),
     );
   }

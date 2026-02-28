@@ -10,7 +10,7 @@ class SchedulePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text(StringConstants.schedule)),
       body: const Center(
-        child: Text(StringConstants.schedule, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+        child: Text(StringConstants.schedule, style: TextStyle(fontSize: 24, fontWeight: .w600)),
       ),
     );
   }

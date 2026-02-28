@@ -53,7 +53,7 @@ class TimeSheetShimmer extends StatelessWidget {
         SizedBox(width: 8),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               AppShimmer.text(width: 40, height: 14),
               SizedBox(height: 4),
@@ -62,7 +62,7 @@ class TimeSheetShimmer extends StatelessWidget {
           ),
         ),
         Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: .end,
           children: [
             AppShimmer.text(width: 40, height: 20),
             SizedBox(height: 4),
@@ -80,16 +80,16 @@ class _ShimmerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const .symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.theme.cardColor),
+        borderRadius: .circular(12),
+        border: .all(color: context.theme.cardColor),
       ),
       child: const Row(
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: [
                 Row(
                   children: [

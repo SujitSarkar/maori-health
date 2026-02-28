@@ -68,7 +68,7 @@ class _AssetsView extends StatelessWidget {
     return SwipeRefreshWrapper(
       onRefresh: () async => context.read<AssetBloc>().add(const AssetsLoadEvent()),
       child: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        padding: const .fromLTRB(16, 8, 16, 16),
         itemCount: assets.length,
         separatorBuilder: (_, _) => const SizedBox(height: 14),
         itemBuilder: (context, index) {

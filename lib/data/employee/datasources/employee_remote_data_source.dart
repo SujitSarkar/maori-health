@@ -17,17 +17,27 @@ class EmployeeRemoteDataSourceImpl implements EmployeeRemoteDataSource {
   @override
   Future<List<EmployeeModel>> getEmployees({int page = 1}) async {
     try {
-      final response = await _client.get(ApiEndpoints.employees, queryParameters: {'page': page});
-      final body = response.data as Map<String, dynamic>;
-      if (body['success'] != true) {
-        throw ApiException(
-          statusCode: response.statusCode,
-          message: body['message']?.toString() ?? 'Failed to fetch employees',
-        );
+      final List<EmployeeModel> employees = [];
+      while (true) {
+        List<EmployeeModel> newList = [];
+        final response = await _client.get(ApiEndpoints.employees, queryParameters: {'page': page});
+        final body = response.data as Map<String, dynamic>;
+        if (body['success'] != true) {
+          throw ApiException(
+            statusCode: response.statusCode,
+            message: body['message']?.toString() ?? 'Failed to fetch employees',
+          );
+        }
+        final dataList = body['data']?['data'] as List<dynamic>? ?? [];
+        newList = dataList.map((e) => EmployeeModel.fromJson(e as Map<String, dynamic>)).toList();
+        employees.addAll(newList);
+
+        if (body['data']?['last_page'] == page) {
+          break;
+        }
+        page++;
       }
-      final paginated = body['data'] as Map<String, dynamic>? ?? {};
-      final list = paginated['data'] as List<dynamic>? ?? [];
-      return list.map((e) => EmployeeModel.fromJson(e as Map<String, dynamic>)).toList();
+      return employees;
     } on DioException catch (e) {
       final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
       throw ApiException(

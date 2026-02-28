@@ -18,9 +18,12 @@ abstract class ApiEndpoints {
   // Dashboard
   static const String dashboard = 'dashboard';
 
+  // Lookups
+  static const String employees = 'lookups/employees';
+  static const String clients = 'lookups/clients';
+
   // TimeSheets
   static const String timeSheets = 'schedules/timesheet';
-  static const String employees = 'lookups/employees';
 
   static String fullUrl(String path) => '${EnvConfig.baseUrl}$path';
 }

@@ -19,7 +19,7 @@ class AssetDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: CommonAppBar(context: context, title: Text(StringConstants.viewDetails)),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const .all(16),
         child: Column(
           crossAxisAlignment: .start,
           children: [
@@ -37,14 +37,14 @@ class AssetDetailsPage extends StatelessWidget {
   Widget _buildInfoCard(BuildContext context) {
     final textTheme = context.textTheme;
     final labelStyle = textTheme.bodyMedium;
-    final valueStyle = textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600);
+    final valueStyle = textTheme.bodyMedium?.copyWith(fontWeight: .w600);
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const .all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: context.theme.dividerColor),
+        borderRadius: .circular(14),
+        border: .all(color: context.theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: .start,
@@ -111,7 +111,7 @@ class AssetDetailsPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Text(StringConstants.description, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+        Text(StringConstants.description, style: textTheme.titleMedium?.copyWith(fontWeight: .bold)),
         const SizedBox(height: 8),
         Text(
           asset.asset.note ?? StringConstants.na,
@@ -127,11 +127,11 @@ class AssetDetailsPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Text(StringConstants.attachment, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+        Text(StringConstants.attachment, style: textTheme.titleMedium?.copyWith(fontWeight: .bold)),
         const SizedBox(height: 12),
         asset.stock.status != null
             ? ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: .circular(12),
                 child: CachedNetworkImage(
                   imageUrl: asset.stock.status ?? '',
                   placeholder: (context, url) => _buildAttachmentPlaceholder(context),
@@ -147,10 +147,7 @@ class AssetDetailsPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 200,
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: context.colorScheme.surfaceContainerHighest, borderRadius: .circular(12)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

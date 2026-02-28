@@ -47,12 +47,12 @@ class _ProfileBody extends StatelessWidget {
     final textTheme = context.textTheme;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const .fromLTRB(16, 0, 16, 16),
       child: Column(
         children: [
           _buildAvatar(context),
           const SizedBox(height: 8),
-          Text(user.fullName ?? '-', style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+          Text(user.fullName ?? '-', style: textTheme.titleLarge?.copyWith(fontWeight: .bold)),
           const SizedBox(height: 4),
           Text(
             _formatUserType(user.userType),
@@ -148,14 +148,11 @@ class _StatusBadge extends StatelessWidget {
     final isActive = status?.toLowerCase() == 'active';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.success : Colors.grey,
-        borderRadius: BorderRadius.circular(20),
-      ),
+      padding: const .symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(color: isActive ? AppColors.success : Colors.grey, borderRadius: .circular(20)),
       child: Text(
         (status ?? '-').capitalize(),
-        style: context.textTheme.labelSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+        style: context.textTheme.labelSmall?.copyWith(color: Colors.white, fontWeight: .w600),
       ),
     );
   }

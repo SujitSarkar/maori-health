@@ -160,11 +160,11 @@ class _SuggestionSheetState<T> extends State<_SuggestionSheet<T>> {
       children: [
         if (widget.title != null)
           Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 4),
-            child: Text(widget.title!, style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+            padding: const .only(top: 12, bottom: 4),
+            child: Text(widget.title!, style: context.textTheme.titleMedium?.copyWith(fontWeight: .bold)),
           ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+          padding: const .fromLTRB(12, 12, 12, 8),
           child: ValueListenableBuilder<TextEditingValue>(
             valueListenable: _searchController,
             builder: (context, value, _) {
@@ -181,16 +181,10 @@ class _SuggestionSheetState<T> extends State<_SuggestionSheet<T>> {
                       : null,
                   hintText: widget.searchHint ?? 'Search',
                   hintStyle: TextStyle(color: context.theme.hintColor),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  border: OutlineInputBorder(borderRadius: .circular(16), borderSide: BorderSide.none),
+                  enabledBorder: OutlineInputBorder(borderRadius: .circular(16), borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(borderRadius: .circular(16), borderSide: BorderSide.none),
+                  contentPadding: const .symmetric(horizontal: 16, vertical: 12),
                 ),
               );
             },

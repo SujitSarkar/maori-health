@@ -36,10 +36,10 @@ class JobDetailsInfoCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const .all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: context.theme.dividerColor),
+        borderRadius: .circular(14),
+        border: .all(color: context.theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: .start,
@@ -51,7 +51,7 @@ class JobDetailsInfoCard extends StatelessWidget {
                   crossAxisAlignment: .start,
                   children: [
                     Text(StringConstants.date, style: labelStyle),
-                    Text(date, style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+                    Text(date, style: textTheme.headlineSmall?.copyWith(fontWeight: .bold)),
                   ],
                 ),
               ),
@@ -65,26 +65,26 @@ class JobDetailsInfoCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(StringConstants.jobType, style: labelStyle),
-          Text(jobType, style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+          Text(jobType, style: textTheme.titleLarge?.copyWith(fontWeight: .bold)),
           const SizedBox(height: 8),
           Text(StringConstants.clientName, style: labelStyle),
-          Text(clientName, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(clientName, style: textTheme.titleMedium?.copyWith(fontWeight: .bold)),
           const SizedBox(height: 8),
           Text(StringConstants.clientAddress, style: labelStyle),
-          Text(clientAddress, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(clientAddress, style: textTheme.titleMedium?.copyWith(fontWeight: .bold)),
           const SizedBox(height: 8),
           Text(StringConstants.duration, style: labelStyle),
           Row(
             crossAxisAlignment: .baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(duration, style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              Text(duration, style: textTheme.titleLarge?.copyWith(fontWeight: .bold)),
               const SizedBox(width: 6),
               Text(StringConstants.hours, style: textTheme.bodyMedium),
             ],
           ),
           const SizedBox(height: 12),
-          Text(StringConstants.scheduledTime, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+          Text(StringConstants.scheduledTime, style: textTheme.titleSmall?.copyWith(fontWeight: .bold)),
           const SizedBox(height: 4),
           Row(
             children: [
@@ -110,7 +110,7 @@ class JobDetailsInfoCard extends StatelessWidget {
           ),
           if (jobStartedTime != null) ...[
             const SizedBox(height: 12),
-            Text(StringConstants.jobStartedTime, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+            Text(StringConstants.jobStartedTime, style: textTheme.titleSmall?.copyWith(fontWeight: .bold)),
             const SizedBox(height: 2),
             Text(jobStartedTime!, style: textTheme.bodyMedium),
           ],
@@ -125,7 +125,7 @@ class JobDetailsInfoCard extends StatelessWidget {
       crossAxisAlignment: .baseline,
       textBaseline: TextBaseline.alphabetic,
       children: [
-        Text(parts.$1, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+        Text(parts.$1, style: context.textTheme.titleLarge?.copyWith(fontWeight: .bold)),
         const SizedBox(width: 4),
         Text(parts.$2, style: context.textTheme.bodyMedium),
       ],

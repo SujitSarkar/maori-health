@@ -1,14 +1,14 @@
 class DataParseUtil {
-  static int parseInt(dynamic value) {
+  static int parseInt(dynamic value, {int defaultValue = 0}) {
     if (value is int) return value;
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
+    if (value is String) return int.tryParse(value) ?? defaultValue;
+    return defaultValue;
   }
 
-  static double parseDouble(dynamic value) {
+  static double parseDouble(dynamic value, {double defaultValue = 0.0}) {
     if (value is double) return value;
     if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0.0;
-    return 0.0;
+    if (value is String) return double.tryParse(value) ?? defaultValue;
+    return defaultValue;
   }
 }

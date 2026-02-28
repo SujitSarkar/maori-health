@@ -9,9 +9,9 @@ class DashboardShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
+      padding: const .fromLTRB(0, 16, 0, 24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           _buildHeaderShimmer(),
           const SizedBox(height: 20),
@@ -44,7 +44,7 @@ class DashboardShimmer extends StatelessWidget {
       children: [
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               AppShimmer.text(width: 160, height: 22, borderRadius: 6),
               SizedBox(height: 6),
@@ -76,7 +76,7 @@ class _JobCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         AppShimmer.text(width: 180, height: 12),
         SizedBox(height: 8),

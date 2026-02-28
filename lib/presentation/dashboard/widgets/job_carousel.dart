@@ -46,7 +46,7 @@ class _JobCarouselState extends State<JobCarousel> {
             itemBuilder: (_, i) {
               final job = jobs[i];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const .symmetric(horizontal: 4),
                 child: JobCard(job: job, onTap: widget.onJobTap != null ? () => widget.onJobTap!(job) : null),
               );
             },
@@ -83,7 +83,7 @@ class _CarouselArrow extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(2),
+          padding: const .all(2),
           decoration: BoxDecoration(
             color: context.colorScheme.surface.withAlpha(220),
             shape: BoxShape.circle,

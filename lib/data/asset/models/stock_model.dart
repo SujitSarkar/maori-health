@@ -43,26 +43,4 @@ class StockModel extends Stock {
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "product_id": productId,
-    "category_type_id": categoryTypeId,
-    "supplier_id": supplierId,
-    "note": note,
-    "unique_id": uniqueId,
-    "unit_price": unitPrice,
-    "quantity": quantity,
-    "total_stock": totalStock,
-    "status": status,
-    "mac_id": macId,
-    "purchase_date":
-        "${purchaseDate?.year.toString().padLeft(4, '0')}-${purchaseDate?.month.toString().padLeft(2, '0')}-${purchaseDate?.day.toString().padLeft(2, '0')}",
-    "warranty_date": warrantyDate,
-    "testing_date": testingDate,
-    "location": location,
-    "operator_id": operatorId,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-  };
 }

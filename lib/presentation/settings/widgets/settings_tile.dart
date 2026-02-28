@@ -23,15 +23,15 @@ class SettingsTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+      padding: const .symmetric(horizontal: 4, vertical: 6),
       child: Material(
         color: colorScheme.primary.withAlpha(50),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: .circular(14),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: .circular(14),
           child: Padding(
-            padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            padding: padding ?? const .symmetric(horizontal: 16, vertical: 18),
             child: Row(
               children: [
                 Icon(icon, size: 24, color: color ?? colorScheme.onSurface),
@@ -41,7 +41,7 @@ class SettingsTile extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600, color: color),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: .w600, color: color),
                   ),
                 ),
                 if (trailing != null) trailing! else Icon(Icons.chevron_right, color: colorScheme.onSurface),

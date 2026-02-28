@@ -23,10 +23,10 @@ class AssetListTile extends StatelessWidget {
     final dividerColor = context.theme.dividerColor;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const .all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: dividerColor),
+        borderRadius: .circular(14),
+        border: .all(color: dividerColor),
       ),
       child: Column(
         crossAxisAlignment: .start,
@@ -62,18 +62,15 @@ class AssetListTile extends StatelessWidget {
       crossAxisAlignment: .center,
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: context.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(8),
-          ),
+          padding: const .all(8),
+          decoration: BoxDecoration(color: context.colorScheme.surfaceContainerHighest, borderRadius: .circular(8)),
           child: Icon(Icons.devices_outlined, size: 22, color: context.colorScheme.onSurfaceVariant),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             asset.stock.uniqueId ?? StringConstants.na,
-            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+            style: textTheme.titleSmall?.copyWith(fontWeight: .w600),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -92,7 +89,7 @@ class AssetListTile extends StatelessWidget {
         const SizedBox(width: 8),
         Text(label, style: textTheme.bodyMedium),
         const Spacer(),
-        Text(value, style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+        Text(value, style: textTheme.bodyMedium?.copyWith(fontWeight: .w600)),
       ],
     );
   }
@@ -128,7 +125,7 @@ class AssetListTile extends StatelessWidget {
         onPressed: onView,
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(164, 36),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: .circular(8)),
           backgroundColor: Colors.transparent,
           foregroundColor: context.colorScheme.onSurface,
         ),
@@ -162,11 +159,11 @@ class _StatusBadge extends StatelessWidget {
     final bgColor = AssetUtils.statusBackgroundColor(ackStatus, context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(6)),
+      padding: const .symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(color: bgColor, borderRadius: .circular(6)),
       child: Text(
         label,
-        style: context.textTheme.labelSmall?.copyWith(color: fgColor, fontWeight: FontWeight.w600),
+        style: context.textTheme.labelSmall?.copyWith(color: fgColor, fontWeight: .w600),
       ),
     );
   }
@@ -191,7 +188,7 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: .circular(10),
       child: SolidButton(
         onPressed: onTap,
         backgroundColor: backgroundColor,
@@ -205,7 +202,7 @@ class _ActionButton extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: context.textTheme.bodyMedium?.copyWith(color: foregroundColor, fontWeight: FontWeight.w600),
+              style: context.textTheme.bodyMedium?.copyWith(color: foregroundColor, fontWeight: .w600),
             ),
           ],
         ),

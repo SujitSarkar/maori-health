@@ -17,20 +17,20 @@ class NotificationTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const .symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: notification.isRead ? context.theme.cardColor : context.theme.colorScheme.primary.withAlpha(30),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: context.theme.dividerColor),
+          borderRadius: .circular(8),
+          border: .all(color: context.theme.dividerColor),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: .center,
           children: [
             Icon(Icons.notifications_none, size: 22, color: context.colorScheme.primary.withAlpha(180)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Text(notification.title, style: context.textTheme.bodyMedium),
                   if (notification.message.isNotEmpty) ...[
@@ -47,7 +47,7 @@ class NotificationTile extends StatelessWidget {
                     Text(
                       '#${notification.data.jobScheduleId}',
                       style: context.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: .w600,
                         color: context.colorScheme.primary,
                       ),
                     ),
@@ -58,7 +58,7 @@ class NotificationTile extends StatelessWidget {
             if (createdAt != null) ...[
               const SizedBox(width: 8),
               Padding(
-                padding: const EdgeInsets.only(top: 2),
+                padding: const .only(top: 2),
                 child: Text(
                   DateConverter.timeAgo(createdAt),
                   style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),

@@ -39,23 +39,4 @@ class AssetModel extends Asset {
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     deletedAt: json["deleted_at"] == null ? null : DateTime.parse(json["deleted_at"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "user_id": userId,
-    "stock_id": stockId,
-    "assign_id": assignId,
-    "quantity": quantity,
-    "assigned_date": assignedDate,
-    "status": status,
-    "action_status": actionStatus,
-    "acknowledgement_status": acknowledgementStatus,
-    "operator_id": operatorId,
-    "received_at": receivedAt?.toIso8601String(),
-    "received_by": receivedBy,
-    "note": note,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "deleted_at": deletedAt?.toIso8601String(),
-  };
 }

@@ -11,7 +11,7 @@ class AppBottomSheet extends StatelessWidget {
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(borderRadius: .vertical(top: .circular(20))),
       builder: (_) => AppBottomSheet(child: child),
     );
   }
@@ -19,7 +19,7 @@ class AppBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: .only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -28,7 +28,7 @@ class AppBottomSheet extends StatelessWidget {
             Container(
               width: 40,
               height: 4,
-              decoration: BoxDecoration(color: context.theme.dividerColor, borderRadius: BorderRadius.circular(2)),
+              decoration: BoxDecoration(color: context.theme.dividerColor, borderRadius: .circular(2)),
             ),
             child,
           ],

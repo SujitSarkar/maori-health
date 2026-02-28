@@ -73,27 +73,24 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
         }
       },
       child: Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: .circular(16)),
         clipBehavior: Clip.antiAlias,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        insetPadding: const .symmetric(horizontal: 24, vertical: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const .symmetric(vertical: 14),
               decoration: BoxDecoration(color: context.colorScheme.primary),
               child: Text(
                 StringConstants.changePassword,
                 textAlign: TextAlign.center,
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: context.colorScheme.onPrimary,
-                ),
+                style: context.textTheme.titleMedium?.copyWith(fontWeight: .bold, color: context.colorScheme.onPrimary),
               ),
             ),
             SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+              padding: const .fromLTRB(20, 20, 20, 8),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -149,7 +146,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              padding: const .fromLTRB(16, 8, 16, 16),
               child: BlocBuilder<AuthBloc, AuthState>(
                 buildWhen: (prev, curr) => prev.runtimeType != curr.runtimeType,
                 builder: (context, state) {

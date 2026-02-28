@@ -20,21 +20,18 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
+          padding: const .fromLTRB(12, 20, 12, 0),
           child: Column(
             crossAxisAlignment: .start,
             children: [
-              Text(
-                StringConstants.settings,
-                style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
+              Text(StringConstants.settings, style: theme.textTheme.headlineMedium?.copyWith(fontWeight: .bold)),
               const SizedBox(height: 16),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  padding: const .symmetric(horizontal: 8, vertical: 12),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: theme.dividerColor),
+                    borderRadius: .circular(16),
+                    border: .all(color: theme.dividerColor),
                   ),
                   child: SingleChildScrollView(
                     child: Column(

@@ -26,9 +26,7 @@ class SplashPage extends StatelessWidget {
         body: Center(
           child: Text(
             StringConstants.appName,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white, fontWeight: .bold),
           ),
         ),
       ),

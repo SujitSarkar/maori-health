@@ -32,7 +32,7 @@ class _PaginationWrapperState extends State<PaginationWrapper> {
           Expanded(child: widget.child),
           if (widget.isLoadingMore)
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: .symmetric(vertical: 16),
               child: SizedBox(height: 24, width: 24, child: LoadingWidget()),
             ),
         ],

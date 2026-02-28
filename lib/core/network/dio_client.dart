@@ -5,12 +5,13 @@ import 'package:maori_health/core/config/app_constants.dart';
 import 'package:maori_health/core/config/env_config.dart';
 import 'package:maori_health/core/network/interceptors/auth_interceptor.dart';
 import 'package:maori_health/core/network/interceptors/refresh_token_interceptor.dart';
+import 'package:maori_health/core/storage/local_cache_service.dart';
 import 'package:maori_health/core/storage/secure_storage_service.dart';
 
 class DioClient {
   late final Dio _dio;
 
-  DioClient({required SecureStorageService secureStorage}) {
+  DioClient({required SecureStorageService secureStorage, required LocalCacheService cache}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: EnvConfig.baseUrl,
@@ -22,7 +23,7 @@ class DioClient {
 
     _dio.interceptors.addAll([
       AuthInterceptor(secureStorage: secureStorage),
-      RefreshTokenInterceptor(dio: _dio, secureStorage: secureStorage),
+      RefreshTokenInterceptor(secureStorage: secureStorage, cache: cache),
       if (EnvConfig.isDev)
         LogInterceptor(
           requestBody: true,

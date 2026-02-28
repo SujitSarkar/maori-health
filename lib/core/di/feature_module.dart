@@ -8,31 +8,31 @@ import 'package:maori_health/core/storage/secure_storage_service.dart';
 import 'package:maori_health/data/auth/datasources/auth_local_data_source.dart';
 import 'package:maori_health/data/auth/datasources/auth_remote_data_source.dart';
 import 'package:maori_health/data/auth/repositories/auth_repository_impl.dart';
-import 'package:maori_health/domain/auth/repositories/auth_repository.dart';
-
+import 'package:maori_health/data/client/datasource/client_remote_data_source.dart';
+import 'package:maori_health/data/client/repositories/client_repository_impl.dart';
 import 'package:maori_health/data/asset/datasources/asset_remote_data_source.dart';
 import 'package:maori_health/data/asset/repositories/asset_repository_impl.dart';
-import 'package:maori_health/domain/asset/repositories/asset_repository.dart';
-
 import 'package:maori_health/data/notification/datasources/notification_remote_data_source.dart';
 import 'package:maori_health/data/notification/repositories/notification_repository_impl.dart';
-import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
-
 import 'package:maori_health/data/employee/datasources/employee_remote_data_source.dart';
 import 'package:maori_health/data/employee/repositories/employee_repository_impl.dart';
-import 'package:maori_health/domain/employee/repositories/employee_repository.dart';
-
 import 'package:maori_health/data/timesheet/datasources/timesheet_remote_data_source.dart';
 import 'package:maori_health/data/timesheet/repositories/timesheet_repository_impl.dart';
-import 'package:maori_health/domain/timesheet/repositories/timesheet_repository.dart';
-
 import 'package:maori_health/data/dashboard/datasources/dashboard_remote_data_source.dart';
 import 'package:maori_health/data/dashboard/repositories/dashboard_repository_impl.dart';
+
+import 'package:maori_health/domain/auth/repositories/auth_repository.dart';
+import 'package:maori_health/domain/asset/repositories/asset_repository.dart';
+import 'package:maori_health/domain/client/repositories/client_repository.dart';
+import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
+import 'package:maori_health/domain/employee/repositories/employee_repository.dart';
+import 'package:maori_health/domain/timesheet/repositories/timesheet_repository.dart';
 import 'package:maori_health/domain/dashboard/repositories/dashboard_repository.dart';
 
 import 'package:maori_health/presentation/app/bloc/app_bloc.dart';
 import 'package:maori_health/presentation/asset/bloc/asset_bloc.dart';
 import 'package:maori_health/presentation/auth/bloc/auth_bloc.dart';
+import 'package:maori_health/presentation/client/bloc/client_bloc.dart';
 import 'package:maori_health/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:maori_health/presentation/notification/bloc/notification_bloc.dart';
 import 'package:maori_health/presentation/employee/bloc/employee_bloc.dart';
@@ -57,6 +57,28 @@ void registerFeatureModule(GetIt getIt) {
     )
     ..registerFactory<AuthBloc>(() => AuthBloc(authRepository: getIt<AuthRepository>()));
 
+  // -- Client
+  getIt
+    ..registerLazySingleton<ClientRemoteDataSource>(() => ClientRemoteDataSourceImpl(client: getIt<DioClient>()))
+    ..registerLazySingleton<ClientRepository>(
+      () => ClientRepositoryImpl(
+        remoteDataSource: getIt<ClientRemoteDataSource>(),
+        networkChecker: getIt<NetworkChecker>(),
+      ),
+    )
+    ..registerFactory<ClientBloc>(() => ClientBloc(getIt<ClientRepository>()));
+
+  // ── Employee
+  getIt
+    ..registerLazySingleton<EmployeeRemoteDataSource>(() => EmployeeRemoteDataSourceImpl(client: getIt<DioClient>()))
+    ..registerLazySingleton<EmployeeRepository>(
+      () => EmployeeRepositoryImpl(
+        remoteDataSource: getIt<EmployeeRemoteDataSource>(),
+        networkChecker: getIt<NetworkChecker>(),
+      ),
+    )
+    ..registerFactory<EmployeeBloc>(() => EmployeeBloc(repository: getIt<EmployeeRepository>()));
+
   // ── Asset
   getIt
     ..registerLazySingleton<AssetRemoteDataSource>(() => AssetRemoteDataSourceImpl(client: getIt<DioClient>()))
@@ -80,17 +102,6 @@ void registerFeatureModule(GetIt getIt) {
       ),
     )
     ..registerFactory<NotificationBloc>(() => NotificationBloc(repository: getIt<NotificationRepository>()));
-
-  // ── Employee
-  getIt
-    ..registerLazySingleton<EmployeeRemoteDataSource>(() => EmployeeRemoteDataSourceImpl(client: getIt<DioClient>()))
-    ..registerLazySingleton<EmployeeRepository>(
-      () => EmployeeRepositoryImpl(
-        remoteDataSource: getIt<EmployeeRemoteDataSource>(),
-        networkChecker: getIt<NetworkChecker>(),
-      ),
-    )
-    ..registerFactory<EmployeeBloc>(() => EmployeeBloc(repository: getIt<EmployeeRepository>()));
 
   // ── TimeSheet
   getIt

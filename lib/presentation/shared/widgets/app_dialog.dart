@@ -26,31 +26,31 @@ class AppDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(16)),
       clipBehavior: Clip.antiAlias,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      insetPadding: const .symmetric(horizontal: 24, vertical: 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding: const .symmetric(vertical: 14),
             decoration: BoxDecoration(color: context.theme.colorScheme.primary),
             child: Text(
               title,
               textAlign: TextAlign.center,
               style: context.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
                 color: context.theme.colorScheme.onPrimary,
               ),
             ),
           ),
           Flexible(
-            child: SingleChildScrollView(padding: const EdgeInsets.fromLTRB(20, 20, 20, 8), child: content),
+            child: SingleChildScrollView(padding: const .fromLTRB(20, 20, 20, 8), child: content),
           ),
           if (actions != null && actions!.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              padding: const .fromLTRB(16, 8, 16, 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: actions!.expand((w) => [w, const SizedBox(width: 12)]).toList()..removeLast(),

@@ -20,10 +20,10 @@ class TimeSheetSummaryHeader extends StatelessWidget {
         Expanded(
           child: Text(
             '$totalAppointments ${StringConstants.appointments}',
-            style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: context.textTheme.bodyMedium?.copyWith(fontWeight: .w600),
           ),
         ),
-        Text(hoursLabel, style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+        Text(hoursLabel, style: context.textTheme.titleLarge?.copyWith(fontWeight: .w700)),
       ],
     );
   }

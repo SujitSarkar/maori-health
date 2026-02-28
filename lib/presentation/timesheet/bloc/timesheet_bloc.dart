@@ -33,7 +33,7 @@ class TimeSheetBloc extends Bloc<TimeSheetEvent, TimeSheetState> {
       onSuccess: (response) async {
         emit(
           TimeSheetLoadedState(
-            timeSheets: response.entries,
+            timeSheets: response.timeSheets,
             currentPage: response.currentPage,
             lastPage: response.lastPage,
             totalSchedules: response.totalSchedules,
@@ -65,11 +65,11 @@ class TimeSheetBloc extends Bloc<TimeSheetEvent, TimeSheetState> {
       onSuccess: (response) async {
         emit(
           TimeSheetLoadedState(
-            timeSheets: [...currentState.timeSheets, ...response.entries],
+            timeSheets: [...currentState.timeSheets, ...response.timeSheets],
             currentPage: response.currentPage,
             lastPage: response.lastPage,
-            totalSchedules: response.totalSchedules,
-            totalTime: response.totalTime,
+            totalSchedules: currentState.totalSchedules + response.totalSchedules,
+            totalTime: currentState.totalTime + response.totalTime,
           ),
         );
       },

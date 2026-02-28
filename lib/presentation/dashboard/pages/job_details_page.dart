@@ -27,7 +27,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: const .fromLTRB(16, 16, 16, 24),
           child: Column(
             crossAxisAlignment: .start,
             children: [
@@ -60,10 +60,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
       children: [
         GestureDetector(onTap: () => Navigator.maybePop(context), child: const Icon(Icons.arrow_back)),
         const SizedBox(width: 8),
-        Text(
-          StringConstants.jobDetails,
-          style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
+        Text(StringConstants.jobDetails, style: context.textTheme.headlineMedium?.copyWith(fontWeight: .bold)),
       ],
     );
   }

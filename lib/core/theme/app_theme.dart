@@ -21,30 +21,30 @@ abstract class AppTheme {
         foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600, color: colorScheme.onPrimary),
+        titleTextStyle: GoogleFonts.poppins(fontSize: 20, fontWeight: .w600, color: colorScheme.onPrimary),
       ),
       cardTheme: const CardThemeData(
         color: Colors.white,
         elevation: 2,
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: .symmetric(horizontal: 16, vertical: 8),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest.withAlpha(80),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(borderRadius: .circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: .circular(12),
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const .symmetric(horizontal: 16, vertical: 14),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
           minimumSize: const Size.fromHeight(48),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          textStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+          shape: RoundedRectangleBorder(borderRadius: .circular(12)),
+          textStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: .w600),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -53,7 +53,7 @@ abstract class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
       ),
       bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),
     );
@@ -76,30 +76,30 @@ abstract class AppTheme {
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600, color: colorScheme.onSurface),
+        titleTextStyle: GoogleFonts.poppins(fontSize: 20, fontWeight: .w600, color: colorScheme.onSurface),
       ),
       cardTheme: const CardThemeData(
         color: AppColors.cardDark,
         elevation: 2,
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: .symmetric(horizontal: 16, vertical: 8),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest.withAlpha(80),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(borderRadius: .circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: .circular(12),
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const .symmetric(horizontal: 16, vertical: 14),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
           minimumSize: const Size.fromHeight(48),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          textStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+          shape: RoundedRectangleBorder(borderRadius: .circular(12)),
+          textStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: .w600),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -108,7 +108,7 @@ abstract class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
       ),
       bottomSheetTheme: const BottomSheetThemeData(backgroundColor: AppColors.cardDark),
     );

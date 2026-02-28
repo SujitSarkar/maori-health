@@ -15,20 +15,17 @@ class ProfileSectionCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: context.theme.cardColor,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: context.theme.dividerColor),
+        borderRadius: .circular(14),
+        border: .all(color: context.theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: .start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+            padding: const .fromLTRB(16, 14, 16, 4),
             child: Text(
               title,
-              style: context.textTheme.titleSmall?.copyWith(
-                color: context.colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: context.textTheme.titleSmall?.copyWith(color: context.colorScheme.primary, fontWeight: .w600),
             ),
           ),
           ...children,

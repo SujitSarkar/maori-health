@@ -15,20 +15,20 @@ class StatCard extends StatelessWidget {
 
     return Container(
       alignment: .center,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-      decoration: BoxDecoration(color: AppColors.primary.withAlpha(150), borderRadius: BorderRadius.circular(16)),
+      padding: const .symmetric(vertical: 20, horizontal: 12),
+      decoration: BoxDecoration(color: AppColors.primary.withAlpha(150), borderRadius: .circular(16)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: .center,
         crossAxisAlignment: .center,
         children: [
-          Text(value, style: textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(value, style: textTheme.headlineMedium?.copyWith(fontWeight: .bold)),
           const SizedBox(height: 4),
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
               label,
-              style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: textTheme.bodyMedium?.copyWith(fontWeight: .w600),
               textAlign: TextAlign.center,
             ),
           ),

@@ -19,7 +19,7 @@ class NotificationShimmer extends StatelessWidget {
       baseColor: isDark ? AppColors.shimmerBaseDark : AppColors.shimmerBaseLight,
       highlightColor: isDark ? AppColors.shimmerHighlightDark : AppColors.shimmerHighlightLight,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const .symmetric(vertical: 8),
         physics: const NeverScrollableScrollPhysics(),
         itemCount: itemCount,
         separatorBuilder: (_, _) => const SizedBox(height: 8),
@@ -35,10 +35,10 @@ class _ShimmerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const .symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.theme.cardColor),
+        borderRadius: .circular(8),
+        border: .all(color: context.theme.cardColor),
       ),
       child: const Row(
         crossAxisAlignment: .center,

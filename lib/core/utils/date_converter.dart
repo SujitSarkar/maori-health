@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 abstract class DateConverter {
@@ -8,7 +7,9 @@ abstract class DateConverter {
 
   static String toIsoDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
 
-  static String toWeekdayDate(DateTime date) => DateFormat('EEEE, dd MMM').format(date);
+  static String toWeekDay(DateTime date) => DateFormat('EEEE, dd MMM').format(date);
+
+  static String toWeekMonthDay(DateTime date) => DateFormat('EEEE, MMM dd').format(date);
 
   static ({int day, int hour, int minute}) minutesToDhm(int totalMinutes) {
     return (day: totalMinutes ~/ 1440, hour: (totalMinutes % 1440) ~/ 60, minute: totalMinutes % 60);
@@ -28,8 +29,8 @@ abstract class DateConverter {
     }
   }
 
-  static String toDisplayTime(TimeOfDay time, {required String locale}) {
-    return DateFormat('hh:mm a', locale).format(DateTime(0, 0, 0, time.hour, time.minute));
+  static String toDisplayTime(DateTime dateTime, {String? locale}) {
+    return DateFormat('hh:mm a', locale).format(dateTime);
   }
 
   static String timeAgo(DateTime dateTime) {

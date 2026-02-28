@@ -15,7 +15,7 @@ class ProfileInfoTile extends StatelessWidget {
     final textTheme = context.textTheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const .symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
           Icon(icon, size: 20, color: context.colorScheme.onSurfaceVariant),
@@ -25,7 +25,7 @@ class ProfileInfoTile extends StatelessWidget {
           if (trailing != null)
             trailing!
           else
-            Text(value ?? '-', style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+            Text(value ?? '-', style: textTheme.bodyMedium?.copyWith(fontWeight: .w600)),
         ],
       ),
     );

@@ -35,14 +35,11 @@ class _NotificationView extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          padding: const .fromLTRB(16, 16, 16, 0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
-              Text(
-                StringConstants.notification,
-                style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
+              Text(StringConstants.notification, style: context.textTheme.headlineMedium?.copyWith(fontWeight: .bold)),
               const SizedBox(height: 12),
               Expanded(
                 child: BlocBuilder<NotificationBloc, NotificationState>(
@@ -89,7 +86,7 @@ class _NotificationView extends StatelessWidget {
         onRefresh: () => _onRefresh(context),
         child: ListView.separated(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const .symmetric(vertical: 8),
           itemCount: state.notifications.length,
           separatorBuilder: (_, _) => const SizedBox(height: 8),
           itemBuilder: (_, index) {

@@ -54,14 +54,16 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Scaffold(
-        body: SingleChildScrollView(child: Column(children: [_buildHeaderSection(screenHeight), _buildFormSection()])),
+        body: SingleChildScrollView(
+          child: Column(children: [_buildHeaderSection(screenHeight), _buildFormSection(screenHeight)]),
+        ),
       ),
     );
   }
 
   Widget _buildHeaderSection(double screenHeight) {
     return SizedBox(
-      height: screenHeight * 0.55,
+      height: screenHeight * 0.5,
       width: double.infinity,
       child: Stack(
         fit: StackFit.expand,
@@ -69,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
           Image.asset(Assets.assetsImagesLoginBg, fit: BoxFit.cover),
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const .only(bottom: 20),
               child: Image.asset(Assets.assetsImagesBannerLogo, width: 200),
             ),
           ),
@@ -78,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildFormSection() {
+  Widget _buildFormSection(double screenHeight) {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
+        padding: const .fromLTRB(32, 32, 32, 0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -136,10 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text(
                     StringConstants.forgotPassword,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF1A5E2D),
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: context.textTheme.bodyMedium?.copyWith(color: const Color(0xFF1A5E2D), fontWeight: .w500),
                   ),
                 ),
               ),
@@ -154,12 +153,12 @@ class _LoginPageState extends State<LoginPage> {
                     foregroundColor: Colors.white,
                     child: Text(
                       StringConstants.login,
-                      style: context.textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: context.textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: .bold),
                     ),
                   );
                 },
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: screenHeight * 0.25),
             ],
           ),
         ),

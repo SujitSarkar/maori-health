@@ -33,21 +33,21 @@ class JobCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const .all(14),
         decoration: BoxDecoration(
           color: AppColors.primary.withAlpha(30),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.primary.withAlpha(100)),
+          borderRadius: .circular(14),
+          border: .all(color: AppColors.primary.withAlpha(100)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(_date, style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500)),
+                  child: Text(_date, style: textTheme.bodySmall?.copyWith(fontWeight: .w500)),
                 ),
                 if (_status == JobStatus.started)
                   Container(
@@ -60,7 +60,7 @@ class JobCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               _title,
-              style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: textTheme.titleMedium?.copyWith(fontWeight: .bold),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -73,7 +73,7 @@ class JobCard extends StatelessWidget {
                 if (_workStartedAt != null)
                   Text(
                     '${StringConstants.startedAt} : $_workStartedAt',
-                    style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+                    style: textTheme.bodySmall?.copyWith(fontWeight: .w600),
                   ),
               ],
             ),
@@ -105,11 +105,11 @@ class _TimeColumn extends StatelessWidget {
     final textTheme = context.textTheme;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
-        Text(label, style: textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500)),
+        Text(label, style: textTheme.bodySmall?.copyWith(fontWeight: .w500)),
         const SizedBox(height: 2),
-        Text(value, style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+        Text(value, style: textTheme.titleSmall?.copyWith(fontWeight: .bold)),
       ],
     );
   }

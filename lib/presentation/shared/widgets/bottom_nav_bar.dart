@@ -54,7 +54,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               boxShadow: [BoxShadow(color: theme.shadowColor, offset: const Offset(0, -2))],
             ),
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              borderRadius: const .only(topLeft: .circular(20), topRight: .circular(20)),
               child: BottomNavigationBar(
                 currentIndex: _currentIndex,
                 onTap: _onTabTapped,
