@@ -7,7 +7,10 @@ import 'package:maori_health/domain/dashboard/entities/job.dart';
 
 import 'package:maori_health/presentation/asset/pages/asset_details_page.dart';
 import 'package:maori_health/presentation/asset/pages/assets_page.dart';
+import 'package:maori_health/presentation/auth/pages/forgot_password_otp_page.dart';
+import 'package:maori_health/presentation/auth/pages/forgot_password_page.dart';
 import 'package:maori_health/presentation/auth/pages/login_page.dart';
+import 'package:maori_health/presentation/auth/pages/reset_password_page.dart';
 import 'package:maori_health/presentation/dashboard/pages/job_details_page.dart';
 import 'package:maori_health/presentation/profile/pages/profile_page.dart';
 import 'package:maori_health/presentation/splash/splash_page.dart';
@@ -27,6 +30,33 @@ class AppRouter {
       routes: [
         GoRoute(name: RouteNames.splash, path: RouteNames.splashPath, builder: (context, state) => const SplashPage()),
         GoRoute(name: RouteNames.login, path: RouteNames.loginPath, builder: (context, state) => const LoginPage()),
+        GoRoute(
+          name: RouteNames.forgotPassword,
+          path: RouteNames.forgotPasswordPath,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final email = extra['email'] as String?;
+            return ForgotPasswordPage(email: email);
+          },
+        ),
+        GoRoute(
+          name: RouteNames.forgotPasswordOtp,
+          path: RouteNames.forgotPasswordOtpPath,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            final email = extra['email'] as String;
+            return ForgotPasswordOtpPage(email: email);
+          },
+        ),
+        GoRoute(
+          name: RouteNames.resetPassword,
+          path: RouteNames.resetPasswordPath,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>;
+            return ResetPasswordPage(email: extra['email'] as String);
+          },
+        ),
+
         GoRoute(name: RouteNames.home, path: RouteNames.homePath, builder: (context, state) => const BottomNavBar()),
         GoRoute(
           name: RouteNames.profile,

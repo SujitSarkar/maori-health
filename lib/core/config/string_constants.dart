@@ -13,12 +13,26 @@ abstract class StringConstants {
   static const String darkMode = 'Dark Mode';
   static const String signOut = 'Sign Out';
 
-  // Login
+  // Auth
   static const String email = 'Email';
   static const String password = 'Password';
   static const String login = 'Login';
-  static const String forgotPassword = 'Forgot Password?';
+  static const String forgotPassword = 'Forgot password';
+  static const String forgotPasswordInstruction = 'Please enter your email to reset the password';
+  static const String updatePassword = 'Update Password';
   static const String areYouSureYouWantToSignOut = 'Are you sure you want to sign out?';
+  static const String resetPassword = 'Reset Password';
+  static const String checkYourEmail = 'Check your email';
+  static const String verifyCode = 'Verify Code';
+  static const String haveNotGotOtpYet = 'Haven\'t got the OTP yet?';
+  static const String resendOtp = 'Resend OTP';
+  static const String setAnewPassword = 'Set a new password';
+  static const String createNewPassInstruction =
+      'Create a new password. Ensure it differs from previous ones for security';
+  static const String confirm = 'Confirm';
+  static const String terminateProcess = 'Terminate process?';
+  static const String terminateProcessInstruction =
+      'If you go back now, the password reset process will be terminated. Do you want to proceed?';
 
   // Dashboard
   static const String welcomeTo = 'Welcome to $appName';
@@ -114,6 +128,8 @@ abstract class StringConstants {
 
   // Common
   static const String ok = 'OK';
+  static const String yes = 'Yes';
+  static const String no = 'No';
   static const String cancel = 'Cancel';
   static const String refresh = 'Refresh';
   static const String noDataFound = 'No data found';

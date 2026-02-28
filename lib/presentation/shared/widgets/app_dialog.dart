@@ -31,14 +31,15 @@ class AppDialog extends StatelessWidget {
       insetPadding: const .symmetric(horizontal: 24, vertical: 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: .start,
         children: [
           Container(
             width: double.infinity,
-            padding: const .symmetric(vertical: 14),
+            padding: const .symmetric(vertical: 14, horizontal: 16),
             decoration: BoxDecoration(color: context.theme.colorScheme.primary),
             child: Text(
               title,
-              textAlign: TextAlign.center,
+              textAlign: .start,
               style: context.textTheme.titleMedium?.copyWith(
                 fontWeight: .bold,
                 color: context.theme.colorScheme.onPrimary,
@@ -46,13 +47,13 @@ class AppDialog extends StatelessWidget {
             ),
           ),
           Flexible(
-            child: SingleChildScrollView(padding: const .fromLTRB(20, 20, 20, 8), child: content),
+            child: SingleChildScrollView(padding: const .fromLTRB(16, 16, 16, 8), child: content),
           ),
           if (actions != null && actions!.isNotEmpty)
             Padding(
-              padding: const .fromLTRB(16, 8, 16, 16),
+              padding: const .fromLTRB(16, 8, 16, 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .end,
                 children: actions!.expand((w) => [w, const SizedBox(width: 12)]).toList()..removeLast(),
               ),
             ),

@@ -1,43 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/router/route_names.dart';
+
 import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/core/utils/form_validators.dart';
 
-import 'package:maori_health/presentation/auth/bloc/bloc.dart';
+import 'package:maori_health/presentation/auth/bloc/auth_bloc.dart';
+import 'package:maori_health/presentation/auth/bloc/auth_state.dart';
+import 'package:maori_health/presentation/auth/widgets/auth_back_bar_widget.dart';
 import 'package:maori_health/presentation/auth/widgets/auth_layout.dart';
 import 'package:maori_health/presentation/shared/decorations/outline_input_decoration.dart';
 import 'package:maori_health/presentation/shared/widgets/solid_button.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key, this.email});
+  final String? email;
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
+
+  @override
+  void initState() {
+    if (widget.email != null) {
+      _emailController.text = widget.email!;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  void _onLogin() {
+  void _onResetPassword() {
     if (!_formKey.currentState!.validate()) return;
 
-    context.read<AuthBloc>().add(
-      AuthLoginEvent(email: _emailController.text.trim(), password: _passwordController.text),
-    );
+    context.pushNamed(RouteNames.forgotPasswordOtp, extra: {'email': _emailController.text.trim()});
+
+    // context.read<AuthBloc>().add(
+    //   AuthLoginEvent(email: _emailController.text.trim(), password: _passwordController.text),
+    // );
   }
 
   @override
@@ -47,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthenticatedState) {
-          context.goNamed(RouteNames.home);
+          // context.goNamed(RouteNames.home);
         } else if (state is AuthErrorState) {
           context.showSnackBar(state.errorMessage, isError: true, onTop: true);
         }
@@ -60,8 +70,13 @@ class _LoginPageState extends State<LoginPage> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: .stretch,
+        crossAxisAlignment: .start,
         children: [
+          const AuthBackBarWidget(
+            title: StringConstants.forgotPassword,
+            subTitle: StringConstants.forgotPasswordInstruction,
+          ),
+          const SizedBox(height: 40),
           TextFormField(
             controller: _emailController,
             keyboardType: .emailAddress,
@@ -70,54 +85,17 @@ class _LoginPageState extends State<LoginPage> {
             autovalidateMode: .onUserInteraction,
             decoration: OutlineInputDecoration(context: context, labelText: StringConstants.email),
           ),
-          const SizedBox(height: 20),
-          TextFormField(
-            controller: _passwordController,
-            obscureText: _obscurePassword,
-            textInputAction: TextInputAction.done,
-            onFieldSubmitted: (_) => _onLogin(),
-            validator: FormValidators.password(),
-            autovalidateMode: .onUserInteraction,
-            keyboardType: .visiblePassword,
-            decoration: OutlineInputDecoration(
-              context: context,
-              labelText: StringConstants.password,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                  color: context.theme.hintColor,
-                  size: 22,
-                ),
-                onPressed: () {
-                  setState(() => _obscurePassword = !_obscurePassword);
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                context.pushNamed(RouteNames.forgotPassword, extra: {'email': _emailController.text.trim()});
-              },
-              child: Text(
-                StringConstants.forgotPassword,
-                style: context.textTheme.bodyMedium?.copyWith(color: const Color(0xFF1A5E2D), fontWeight: .w500),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 40),
           BlocBuilder<AuthBloc, AuthState>(
             buildWhen: (prev, curr) => prev.runtimeType != curr.runtimeType,
             builder: (context, state) {
               return SolidButton(
-                onPressed: _onLogin,
+                onPressed: _onResetPassword,
                 isLoading: state is AuthLoadingState,
                 backgroundColor: const Color(0xFF1A5E2D),
                 foregroundColor: Colors.white,
                 child: Text(
-                  StringConstants.login,
+                  StringConstants.resetPassword,
                   style: context.textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: .bold),
                 ),
               );

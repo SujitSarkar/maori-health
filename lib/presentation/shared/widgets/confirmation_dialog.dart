@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/utils/extensions.dart';
+import 'package:maori_health/presentation/shared/widgets/app_dialog.dart';
 
 Future<bool> showConfirmationDialog(
   BuildContext context, {
@@ -13,8 +14,8 @@ Future<bool> showConfirmationDialog(
 }) async {
   final result = await showDialog<bool>(
     context: context,
-    builder: (dialogContext) => AlertDialog(
-      title: Text(title, style: context.theme.textTheme.titleLarge),
+    builder: (dialogContext) => AppDialog(
+      title: title,
       content: Text(message, style: context.theme.textTheme.bodyMedium),
       actions: [
         TextButton(
