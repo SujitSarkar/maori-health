@@ -11,6 +11,7 @@ abstract class EnvConfig {
 
   static late Env _env;
   static late String baseUrl;
+  static late String hostUrl;
   static late String envName;
 
   static void init(Env env) {
@@ -20,10 +21,11 @@ abstract class EnvConfig {
       case Env.dev:
         envName = 'Development';
         baseUrl = 'https://v3admin.thctsandbox.co.nz/api/v1/';
-
+        hostUrl = 'https://v3admin.thctsandbox.co.nz/';
       case Env.prod:
         envName = 'Production';
         baseUrl = 'https://v3admin.thctsandbox.co.nz/api/v1/';
+        hostUrl = 'https://v3admin.thctsandbox.co.nz/';
     }
   }
 
