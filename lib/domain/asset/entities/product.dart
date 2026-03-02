@@ -4,11 +4,11 @@ class Product extends Equatable {
   final int? id;
   final String? name;
   final int? categoryId;
-  final dynamic brand;
+  final String? brand;
   final String? description;
   final int? stock;
   final int? isActive;
-  final dynamic model;
+  final String? model;
   final String? image;
   final int? operatorId;
   final DateTime? createdAt;
