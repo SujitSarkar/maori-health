@@ -1,5 +1,7 @@
-import 'package:maori_health/domain/asset/entities/stock.dart';
 import 'package:maori_health/core/utils/data_parse_util.dart';
+
+import 'package:maori_health/data/asset/models/product_model.dart';
+import 'package:maori_health/domain/asset/entities/stock.dart';
 
 class StockModel extends Stock {
   const StockModel({
@@ -21,6 +23,7 @@ class StockModel extends Stock {
     required super.operatorId,
     required super.createdAt,
     required super.updatedAt,
+    required super.product,
   });
 
   factory StockModel.fromJson(Map<String, dynamic> json) => StockModel(
@@ -42,5 +45,6 @@ class StockModel extends Stock {
     operatorId: DataParseUtil.parseInt(json["operator_id"]),
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    product: ProductModel.fromJson(json["product"]),
   );
 }

@@ -33,7 +33,7 @@ class AssetListTile extends StatelessWidget {
         children: [
           _buildHeader(context, textTheme),
           const SizedBox(height: 12),
-          _buildInfoRow(context, icon: Icons.tag, label: StringConstants.id, value: '${asset.asset.id}'),
+          _buildInfoRow(context, icon: Icons.tag, label: StringConstants.id, value: '${asset.stock.uniqueId}'),
           const SizedBox(height: 10),
           _buildInfoRow(
             context,
@@ -69,7 +69,7 @@ class AssetListTile extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: Text(
-            asset.stock.uniqueId ?? StringConstants.na,
+            asset.stock.product?.name ?? StringConstants.na,
             style: textTheme.titleSmall?.copyWith(fontWeight: .w600),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -156,7 +156,7 @@ class _StatusBadge extends StatelessWidget {
     final ackStatus = acknowledgementStatus ?? 0;
     final label = AssetUtils.statusLabel(ackStatus);
     final fgColor = AssetUtils.statusColor(ackStatus);
-    final bgColor = AssetUtils.statusBackgroundColor(ackStatus, context);
+    final bgColor = fgColor.withAlpha(30);
 
     return Container(
       padding: const .symmetric(horizontal: 10, vertical: 4),

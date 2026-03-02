@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:maori_health/domain/asset/entities/product.dart';
 
 class Stock extends Equatable {
   final int? id;
@@ -19,6 +20,7 @@ class Stock extends Equatable {
   final int? operatorId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final Product? product;
 
   const Stock({
     this.id,
@@ -39,6 +41,7 @@ class Stock extends Equatable {
     this.operatorId,
     this.createdAt,
     this.updatedAt,
+    this.product,
   });
 
   @override
@@ -61,5 +64,6 @@ class Stock extends Equatable {
     operatorId,
     createdAt,
     updatedAt,
+    product,
   ];
 }

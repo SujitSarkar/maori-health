@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maori_health/core/config/env_config.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
+import 'package:maori_health/core/enums/job.status.enum.dart';
 import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/theme/app_colors.dart';
 import 'package:maori_health/core/utils/extensions.dart';
@@ -80,7 +82,7 @@ class _ProfileBody extends StatelessWidget {
     if (user.avatar == null || user.avatar!.isEmpty) return placeholder;
 
     return CachedNetworkImage(
-      imageUrl: user.avatar!,
+      imageUrl: '${EnvConfig.hostUrl}${user.avatar!}',
       imageBuilder: (_, imageProvider) => CircleAvatar(radius: 56, backgroundImage: imageProvider),
       placeholder: (_, _) => placeholder,
       errorWidget: (_, _, _) => placeholder,
@@ -145,7 +147,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isActive = status?.toLowerCase() == 'active';
+    final isActive = status?.toLowerCase() == JobStatusEnum.active.value;
 
     return Container(
       padding: const .symmetric(horizontal: 12, vertical: 4),

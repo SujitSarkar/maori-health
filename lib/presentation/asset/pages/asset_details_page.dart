@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:maori_health/core/config/env_config.dart';
 
 import 'package:maori_health/core/config/string_constants.dart';
 import 'package:maori_health/core/utils/date_converter.dart';
@@ -129,13 +130,14 @@ class AssetDetailsPage extends StatelessWidget {
       children: [
         Text(StringConstants.attachment, style: textTheme.titleMedium?.copyWith(fontWeight: .bold)),
         const SizedBox(height: 12),
-        asset.stock.status != null
+        asset.stock.product?.image != null
             ? ClipRRect(
                 borderRadius: .circular(12),
                 child: CachedNetworkImage(
-                  imageUrl: asset.stock.status ?? '',
+                  imageUrl: '${EnvConfig.hostUrl}${asset.stock.product?.image}',
+                  imageBuilder: (context, imageProvider) => Image(image: imageProvider),
                   placeholder: (context, url) => _buildAttachmentPlaceholder(context),
-                  errorWidget: (context, url, error) => _buildAttachmentPlaceholder(context),
+                  errorWidget: (context, url, error) => _buildAttachmentPlaceholder(context, icon: Icons.error_outline),
                 ),
               )
             : _buildAttachmentPlaceholder(context),
@@ -143,7 +145,7 @@ class AssetDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAttachmentPlaceholder(BuildContext context) {
+  Widget _buildAttachmentPlaceholder(BuildContext context, {IconData? icon}) {
     return Container(
       width: double.infinity,
       height: 200,
@@ -151,7 +153,7 @@ class AssetDetailsPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.image_outlined, size: 48, color: context.colorScheme.onSurfaceVariant.withAlpha(120)),
+          Icon(icon ?? Icons.image_outlined, size: 48, color: context.colorScheme.onSurfaceVariant.withAlpha(120)),
           const SizedBox(height: 8),
           Text(
             StringConstants.noAttachment,
