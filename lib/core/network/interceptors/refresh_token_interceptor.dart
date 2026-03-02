@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:jwt_decode/jwt_decode.dart';
-import 'package:maori_health/core/storage/local_cache_service.dart';
 
+import 'package:maori_health/core/storage/local_cache_service.dart';
 import 'package:maori_health/core/storage/secure_storage_service.dart';
+import 'package:maori_health/core/utils/utils.dart';
 
 class RefreshTokenInterceptor extends InterceptorsWrapper {
   final SecureStorageService _secureStorage;
@@ -16,6 +16,7 @@ class RefreshTokenInterceptor extends InterceptorsWrapper {
 
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    Utils.hideKeyboard();
     if (err.response?.statusCode != HttpStatus.unauthorized) {
       return handler.next(err);
     }
@@ -23,11 +24,6 @@ class RefreshTokenInterceptor extends InterceptorsWrapper {
     final refreshToken = await _secureStorage.getRefreshToken();
 
     if (refreshToken == null || refreshToken.isEmpty) {
-      await _handleLogout();
-      return handler.reject(err);
-    }
-
-    if (Jwt.isExpired(refreshToken)) {
       await _handleLogout();
       return handler.reject(err);
     }

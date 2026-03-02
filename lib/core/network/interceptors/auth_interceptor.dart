@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+
 import 'package:maori_health/core/storage/secure_storage_service.dart';
+import 'package:maori_health/core/utils/utils.dart';
 
 class AuthInterceptor extends InterceptorsWrapper {
   final SecureStorageService _secureStorage;
@@ -8,6 +10,7 @@ class AuthInterceptor extends InterceptorsWrapper {
 
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    Utils.hideKeyboard();
     final token = await _secureStorage.getAccessToken();
 
     if (token != null && token.isNotEmpty) {
