@@ -32,9 +32,11 @@ class ClientRemoteDataSourceImpl implements ClientRemoteDataSource {
         newList = dataList.map((e) => ClientModel.fromJson(e as Map<String, dynamic>)).toList();
         clients.addAll(newList);
 
-        if (body['data']?['last_page'] == page) {
-          break;
-        }
+        if (page == 2) break;
+
+        // if (body['data']?['last_page'] == page) {
+        //   break;
+        // }
         page++;
       }
       return clients;

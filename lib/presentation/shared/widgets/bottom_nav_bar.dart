@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/config/app_strings.dart';
-import 'package:maori_health/core/di/injection.dart';
 import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/core/utils/utils.dart';
+
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
 import 'package:maori_health/presentation/client/bloc/client_bloc.dart';
+import 'package:maori_health/presentation/employee/bloc/bloc.dart';
 import 'package:maori_health/presentation/notification/bloc/bloc.dart';
-// import 'package:maori_health/presentation/employee/bloc/bloc.dart';
 import 'package:maori_health/presentation/shared/widgets/loading_overlay.dart';
 
 import 'package:maori_health/presentation/dashboard/pages/dashboard_page.dart';
@@ -27,19 +27,14 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
-  // TODO: Replace with dynamic count from BLoC
-  // final int _notificationCount = 120;
-
-  // String get _badgeLabel => _notificationCount > 99 ? '99+' : '$_notificationCount';
 
   static const _pages = <Widget>[DashboardPage(), SchedulePage(), NotificationPage(), SettingsPage()];
 
   @override
   void initState() {
     super.initState();
-    getIt<ClientBloc>().add(const LoadClientsEvent());
-    // TODO: Uncomment when client and employee API is implemented
-    // getIt<EmployeeBloc>().add(const LoadEmployeeEvent());
+    context.read<ClientBloc>().add(const LoadClientsEvent());
+    context.read<EmployeeBloc>().add(const LoadEmployeeEvent());
   }
 
   void _onTabTapped(int index) {
