@@ -29,7 +29,12 @@ import 'package:maori_health/domain/client/repositories/client_repository.dart';
 import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
 import 'package:maori_health/domain/employee/repositories/employee_repository.dart';
 import 'package:maori_health/domain/schedule/repositories/schedule_repository.dart';
+import 'package:maori_health/domain/schedule/usecases/accept_schedule_usecase.dart';
+import 'package:maori_health/domain/schedule/usecases/cancel_schedule_usecase.dart';
+import 'package:maori_health/domain/schedule/usecases/finish_schedule_usecase.dart';
 import 'package:maori_health/domain/schedule/usecases/get_schedule_details_usecase.dart';
+import 'package:maori_health/domain/schedule/usecases/get_schedules_usecase.dart';
+import 'package:maori_health/domain/schedule/usecases/start_schedule_usecase.dart';
 import 'package:maori_health/domain/timesheet/repositories/timesheet_repository.dart';
 import 'package:maori_health/domain/dashboard/repositories/dashboard_repository.dart';
 
@@ -142,5 +147,19 @@ void registerFeatureModule(GetIt getIt) {
     ..registerLazySingleton<GetScheduleDetailsUsecase>(
       () => GetScheduleDetailsUsecase(repository: getIt<ScheduleRepository>()),
     )
-    ..registerFactory<ScheduleBloc>(() => ScheduleBloc(getScheduleDetailsUsecase: getIt<GetScheduleDetailsUsecase>()));
+    ..registerLazySingleton<GetSchedulesUsecase>(() => GetSchedulesUsecase(repository: getIt<ScheduleRepository>()))
+    ..registerLazySingleton<AcceptScheduleUsecase>(() => AcceptScheduleUsecase(repository: getIt<ScheduleRepository>()))
+    ..registerLazySingleton<StartScheduleUsecase>(() => StartScheduleUsecase(repository: getIt<ScheduleRepository>()))
+    ..registerLazySingleton<FinishScheduleUsecase>(() => FinishScheduleUsecase(repository: getIt<ScheduleRepository>()))
+    ..registerLazySingleton<CancelScheduleUsecase>(() => CancelScheduleUsecase(repository: getIt<ScheduleRepository>()))
+    ..registerFactory<ScheduleBloc>(
+      () => ScheduleBloc(
+        getSchedulesUsecase: getIt<GetSchedulesUsecase>(),
+        getScheduleDetailsUsecase: getIt<GetScheduleDetailsUsecase>(),
+        acceptScheduleUsecase: getIt<AcceptScheduleUsecase>(),
+        startScheduleUsecase: getIt<StartScheduleUsecase>(),
+        finishScheduleUsecase: getIt<FinishScheduleUsecase>(),
+        cancelScheduleUsecase: getIt<CancelScheduleUsecase>(),
+      ),
+    );
 }

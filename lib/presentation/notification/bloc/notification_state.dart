@@ -18,7 +18,6 @@ class NotificationLoadedState extends NotificationState {
   final int unreadCount;
   final int currentPage;
   final int lastPage;
-
   final bool isLoadingMore;
 
   const NotificationLoadedState({

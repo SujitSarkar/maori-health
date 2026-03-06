@@ -4,7 +4,29 @@ sealed class ScheduleEvent extends Equatable {
   const ScheduleEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
+}
+
+class SchedulesLoadEvent extends ScheduleEvent {
+  final String? clientUserId;
+  final String? startDate;
+  final String? endDate;
+
+  const SchedulesLoadEvent({this.clientUserId, this.startDate, this.endDate});
+
+  @override
+  List<Object?> get props => [clientUserId, startDate, endDate];
+}
+
+class SchedulesLoadMoreEvent extends ScheduleEvent {
+  final String? clientUserId;
+  final String? startDate;
+  final String? endDate;
+
+  const SchedulesLoadMoreEvent({this.clientUserId, this.startDate, this.endDate});
+
+  @override
+  List<Object?> get props => [clientUserId, startDate, endDate];
 }
 
 class ScheduleDetailsLoadEvent extends ScheduleEvent {
@@ -12,6 +34,41 @@ class ScheduleDetailsLoadEvent extends ScheduleEvent {
 
   const ScheduleDetailsLoadEvent({required this.scheduleId});
 
+  @override
+  List<Object> get props => [scheduleId];
+}
+
+class ScheduleAcceptEvent extends ScheduleEvent {
+  final int scheduleId;
+
+  const ScheduleAcceptEvent({required this.scheduleId});
+
+  @override
+  List<Object> get props => [scheduleId];
+}
+
+class ScheduleStartEvent extends ScheduleEvent {
+  final int scheduleId;
+
+  const ScheduleStartEvent({required this.scheduleId});
+
+  @override
+  List<Object> get props => [scheduleId];
+}
+
+class ScheduleFinishEvent extends ScheduleEvent {
+  final int scheduleId;
+
+  const ScheduleFinishEvent({required this.scheduleId});
+
+  @override
+  List<Object> get props => [scheduleId];
+}
+
+class ScheduleCancelEvent extends ScheduleEvent {
+  final int scheduleId;
+
+  const ScheduleCancelEvent({required this.scheduleId});
   @override
   List<Object> get props => [scheduleId];
 }

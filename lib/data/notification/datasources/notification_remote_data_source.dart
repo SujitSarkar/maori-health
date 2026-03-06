@@ -6,22 +6,7 @@ import 'package:maori_health/core/network/dio_client.dart';
 import 'package:maori_health/core/utils/data_parse_util.dart';
 
 import 'package:maori_health/data/notification/models/notification_response_model.dart';
-
-class PaginatedNotificationResponse {
-  final List<NotificationResponseModel> notifications;
-  final int unreadCount;
-  final int currentPage;
-  final int lastPage;
-
-  const PaginatedNotificationResponse({
-    required this.notifications,
-    required this.unreadCount,
-    required this.currentPage,
-    required this.lastPage,
-  });
-
-  bool get hasMore => currentPage < lastPage;
-}
+import 'package:maori_health/data/notification/models/paginated_notification_response.dart';
 
 abstract class NotificationRemoteDataSource {
   Future<PaginatedNotificationResponse> getNotifications({int page = 1});

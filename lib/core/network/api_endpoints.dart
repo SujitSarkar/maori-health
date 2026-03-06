@@ -23,7 +23,12 @@ abstract class ApiEndpoints {
   static const String dashboard = 'dashboard';
 
   // Schedule
-  static String scheduleById(int scheduleId) => 'schedules/$scheduleId';
+  static const String schedules = 'schedules';
+  static String scheduleById(int scheduleId) => '$schedules/$scheduleId';
+  static String acceptSchedule(int scheduleId) => '$schedules/$scheduleId/accept';
+  static String startSchedule(int scheduleId) => '$schedules/$scheduleId/start';
+  static String finishSchedule(int scheduleId) => '$schedules/$scheduleId/finish';
+  static String cancelSchedule(int scheduleId) => '$schedules/$scheduleId/cancel';
 
   // Lookups
   static const String employees = 'lookups/employees';

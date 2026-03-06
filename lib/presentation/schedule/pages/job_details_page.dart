@@ -41,7 +41,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return BlocListener<ScheduleBloc, ScheduleState>(
       listener: (context, state) {
         if (state is ScheduleLoadedState) {
-          _jobNotifier.value = state.schedule;
+          _jobNotifier.value = state.scheduleDetails;
         } else if (state is ScheduleErrorState) {
           context.showSnackBar(state.errorMessage);
         }

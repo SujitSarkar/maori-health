@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maori_health/core/di/injection.dart';
 import 'package:maori_health/core/enums/schedule.enum.dart';
+import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/utils/schedule_utils.dart';
 import 'package:maori_health/domain/client/entities/client.dart';
 
@@ -39,6 +40,14 @@ class _ScheduleViewState extends State<_ScheduleView> {
   void initState() {
     super.initState();
     selectedWeek.value = ScheduleUtils.getWeekDates(weekStartFrom: WeekStartFrom.monday);
+
+    // Load initial schedules by Daily filter
+    context.read<ScheduleBloc>().add(
+      SchedulesLoadEvent(
+        startDate: DateConverter.toIsoDate(selectedDate.value ?? DateTime.now()),
+        endDate: DateConverter.toIsoDate(selectedDate.value ?? DateTime.now()),
+      ),
+    );
   }
 
   @override
@@ -66,30 +75,29 @@ class _ScheduleViewState extends State<_ScheduleView> {
             Expanded(
               child: BlocBuilder<ScheduleBloc, ScheduleState>(
                 builder: (context, state) {
-                  // return const SizedBox.shrink();
-                  // return switch (state) {
-                  //   ScheduleLoadingState() => const ScheduleShimmer(),
-                  //   ScheduleErrorState() => const ScheduleError(),
-                  //   ScheduleLoadedState() => const ScheduleLoaded(),
-                  // };
+                  return switch (state) {
+                    ScheduleInitial() => const SizedBox.shrink(),
+                    ScheduleLoadingState() => const SizedBox.shrink(),
+                    ScheduleErrorState() => const SizedBox.shrink(),
+                    ScheduleLoadedState() => ValueListenableBuilder(
+                      valueListenable: selectedFilter,
+                      builder: (context, value, child) {
+                        return ScheduleFilterWidget(
+                          selectedFilter: value,
+                          onFilterChanged: (DateTime? date, List<DateTime> week, Client? client) {
+                            selectedDate.value = date;
+                            selectedWeek.value = week;
+                            selectedClient.value = client;
 
-                  return ValueListenableBuilder(
-                    valueListenable: selectedFilter,
-                    builder: (context, value, child) {
-                      return ScheduleFilterWidget(
-                        selectedFilter: value,
-                        onFilterChanged: (DateTime? date, List<DateTime> week, Client? client) {
-                          selectedDate.value = date;
-                          selectedWeek.value = week;
-                          selectedClient.value = client;
-
-                          print('date: ${date?.toIso8601String()}');
-                          print('week: ${week.map((e) => e.toIso8601String()).join(', ')}');
-                          print('client: ${client?.fullName}');
-                        },
-                      );
-                    },
-                  );
+                            print('date: ${date?.toIso8601String()}');
+                            print('week: ${week.map((e) => e.toIso8601String()).join(', ')}');
+                            print('client: ${client?.fullName}');
+                          },
+                        );
+                      },
+                    ),
+                    _ => const SizedBox.shrink(),
+                  };
                 },
               ),
             ),

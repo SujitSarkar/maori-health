@@ -4,6 +4,7 @@ import 'package:maori_health/core/network/network_checker.dart';
 import 'package:maori_health/core/result/result.dart';
 
 import 'package:maori_health/data/notification/datasources/notification_remote_data_source.dart';
+import 'package:maori_health/data/notification/models/paginated_notification_response.dart';
 import 'package:maori_health/domain/notification/entities/notification_response.dart';
 import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
 
