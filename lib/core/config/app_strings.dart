@@ -85,6 +85,7 @@ abstract class AppStrings {
   static const String clientAddress = 'Client Address';
   static const String duration = 'Duration';
   static const String hours = 'Hours';
+  static const String minutes = 'Minutes';
   static const String scheduledTime = 'Scheduled Time';
   static const String start = 'Start';
   static const String end = 'End';
@@ -106,6 +107,9 @@ abstract class AppStrings {
   static const String overHoursMessagePrefix = 'You have exceeded the scheduled appointment time by';
   static const String overHoursMessageMiddle = 'minutes.';
   static const String overHoursMessageSuffix = 'The appointment was scheduled to end at';
+  static const String reason = 'Reason';
+  static const String cancelReason = 'Cancel reason';
+  static const String cancelBy = 'Cancelled by';
 
   // Assets
   static const String id = 'ID';

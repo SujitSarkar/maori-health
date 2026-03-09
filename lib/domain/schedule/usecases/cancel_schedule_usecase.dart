@@ -9,7 +9,21 @@ class CancelScheduleUsecase {
 
   CancelScheduleUsecase({required ScheduleRepository repository}) : _repository = repository;
 
-  Future<Result<AppError, ScheduleModel>> call({required int scheduleId}) async {
-    return _repository.cancelSchedule(scheduleId: scheduleId);
+  Future<Result<AppError, ScheduleModel>> call({
+    required int scheduleId,
+    required String cancelBy,
+    required String reason,
+    String? reasonType,
+    required int hour,
+    required int minute,
+  }) async {
+    return _repository.cancelSchedule(
+      scheduleId: scheduleId,
+      cancelBy: cancelBy,
+      reason: reason,
+      reasonType: reasonType,
+      hour: hour,
+      minute: minute,
+    );
   }
 }

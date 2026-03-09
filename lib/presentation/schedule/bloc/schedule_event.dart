@@ -67,8 +67,20 @@ class ScheduleFinishEvent extends ScheduleEvent {
 
 class ScheduleCancelEvent extends ScheduleEvent {
   final int scheduleId;
+  final String cancelBy;
+  final String reason;
+  final String? reasonType;
+  final int hour;
+  final int minute;
 
-  const ScheduleCancelEvent({required this.scheduleId});
+  const ScheduleCancelEvent({
+    required this.scheduleId,
+    required this.cancelBy,
+    required this.reason,
+    this.reasonType,
+    required this.hour,
+    required this.minute,
+  });
   @override
-  List<Object> get props => [scheduleId];
+  List<Object?> get props => [scheduleId, cancelBy, reason, reasonType, hour, minute];
 }

@@ -92,10 +92,24 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   }
 
   @override
-  Future<Result<AppError, ScheduleModel>> cancelSchedule({required int scheduleId}) async {
+  Future<Result<AppError, ScheduleModel>> cancelSchedule({
+    required int scheduleId,
+    required String cancelBy,
+    required String reason,
+    String? reasonType,
+    required int hour,
+    required int minute,
+  }) async {
     if (!await _networkChecker.hasConnection) return const ErrorResult(NetworkError());
     try {
-      final result = await _remoteDataSource.cancelSchedule(scheduleId: scheduleId);
+      final result = await _remoteDataSource.cancelSchedule(
+        scheduleId: scheduleId,
+        cancelBy: cancelBy,
+        reason: reason,
+        reasonType: reasonType,
+        hour: hour,
+        minute: minute,
+      );
       return SuccessResult(result);
     } on ApiException catch (e) {
       return ErrorResult(ApiError(errorCode: e.statusCode, errorMessage: e.message));

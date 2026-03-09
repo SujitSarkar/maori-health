@@ -7,8 +7,6 @@ import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/utils/utils.dart';
 
 import 'package:maori_health/presentation/auth/bloc/bloc.dart';
-import 'package:maori_health/presentation/client/bloc/client_bloc.dart';
-import 'package:maori_health/presentation/employee/bloc/bloc.dart';
 import 'package:maori_health/presentation/notification/bloc/bloc.dart';
 import 'package:maori_health/presentation/shared/widgets/loading_overlay.dart';
 
@@ -32,8 +30,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   void initState() {
     super.initState();
-    context.read<ClientBloc>().add(const LoadClientsEvent());
-    context.read<EmployeeBloc>().add(const LoadEmployeeEvent());
   }
 
   void _onTabTapped(int index) {

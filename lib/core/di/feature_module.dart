@@ -16,6 +16,8 @@ import 'package:maori_health/data/notification/datasources/notification_remote_d
 import 'package:maori_health/data/notification/repositories/notification_repository_impl.dart';
 import 'package:maori_health/data/employee/datasources/employee_remote_data_source.dart';
 import 'package:maori_health/data/employee/repositories/employee_repository_impl.dart';
+import 'package:maori_health/data/lookup_enums/datasources/lookup_enums_remote_data_source.dart';
+import 'package:maori_health/data/lookup_enums/repositories/lookup_enums_repository_impl.dart';
 import 'package:maori_health/data/schedule/datasources/schedule_remote_datasource.dart';
 import 'package:maori_health/data/schedule/repositories/schedule_repository_impl.dart';
 import 'package:maori_health/data/timesheet/datasources/timesheet_remote_data_source.dart';
@@ -28,6 +30,8 @@ import 'package:maori_health/domain/asset/repositories/asset_repository.dart';
 import 'package:maori_health/domain/client/repositories/client_repository.dart';
 import 'package:maori_health/domain/notification/repositories/notification_repository.dart';
 import 'package:maori_health/domain/employee/repositories/employee_repository.dart';
+import 'package:maori_health/domain/lookup_enums/repositories/lookup_enums_repository.dart';
+import 'package:maori_health/domain/lookup_enums/usecases/get_lookup_enums_usecase.dart';
 import 'package:maori_health/domain/schedule/repositories/schedule_repository.dart';
 import 'package:maori_health/domain/schedule/usecases/accept_schedule_usecase.dart';
 import 'package:maori_health/domain/schedule/usecases/cancel_schedule_usecase.dart';
@@ -45,6 +49,7 @@ import 'package:maori_health/presentation/client/bloc/client_bloc.dart';
 import 'package:maori_health/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:maori_health/presentation/notification/bloc/notification_bloc.dart';
 import 'package:maori_health/presentation/employee/bloc/employee_bloc.dart';
+import 'package:maori_health/presentation/lookup_enums/bloc/lookup_enums_bloc.dart';
 import 'package:maori_health/presentation/schedule/bloc/schedule_bloc.dart';
 import 'package:maori_health/presentation/timesheet/bloc/timesheet_bloc.dart';
 
@@ -88,6 +93,22 @@ void registerFeatureModule(GetIt getIt) {
       ),
     )
     ..registerFactory<EmployeeBloc>(() => EmployeeBloc(repository: getIt<EmployeeRepository>()));
+
+  // ── Lookup Enums
+  getIt
+    ..registerLazySingleton<LookupEnumsRemoteDataSource>(
+      () => LookupEnumsRemoteDataSourceImpl(client: getIt<DioClient>()),
+    )
+    ..registerLazySingleton<LookupEnumsRepository>(
+      () => LookupEnumsRepositoryImpl(
+        remoteDataSource: getIt<LookupEnumsRemoteDataSource>(),
+        networkChecker: getIt<NetworkChecker>(),
+      ),
+    )
+    ..registerLazySingleton<GetLookupEnumsUsecase>(
+      () => GetLookupEnumsUsecase(repository: getIt<LookupEnumsRepository>()),
+    )
+    ..registerFactory<LookupEnumsBloc>(() => LookupEnumsBloc(getLookupEnumsUsecase: getIt<GetLookupEnumsUsecase>()));
 
   // ── Asset
   getIt

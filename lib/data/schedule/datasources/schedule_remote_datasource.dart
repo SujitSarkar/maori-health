@@ -19,7 +19,14 @@ abstract class ScheduleRemoteDataSource {
   Future<ScheduleModel> acceptSchedule({required int scheduleId});
   Future<ScheduleModel> startSchedule({required int scheduleId});
   Future<ScheduleModel> finishSchedule({required int scheduleId});
-  Future<ScheduleModel> cancelSchedule({required int scheduleId});
+  Future<ScheduleModel> cancelSchedule({
+    required int scheduleId,
+    required String cancelBy,
+    required String reason,
+    String? reasonType,
+    required int hour,
+    required int minute,
+  });
 }
 
 class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
@@ -127,9 +134,19 @@ class ScheduleRemoteDataSourceImpl implements ScheduleRemoteDataSource {
   }
 
   @override
-  Future<ScheduleModel> cancelSchedule({required int scheduleId}) async {
+  Future<ScheduleModel> cancelSchedule({
+    required int scheduleId,
+    required String cancelBy,
+    required String reason,
+    String? reasonType,
+    required int hour,
+    required int minute,
+  }) async {
     try {
-      final response = await _client.post(ApiEndpoints.cancelSchedule(scheduleId));
+      final formData = FormData.fromMap({'cancel_by': cancelBy, 'reason': reason, 'hour': hour, 'minute': minute});
+      if (reasonType != null) formData.fields.add(MapEntry('reason_type', reasonType));
+
+      final response = await _client.post(ApiEndpoints.cancelSchedule(scheduleId), data: formData);
       return ScheduleModel.fromJson(response.data['data']);
     } on DioException catch (e) {
       final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;

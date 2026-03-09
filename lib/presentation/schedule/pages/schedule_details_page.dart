@@ -9,6 +9,7 @@ import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/core/utils/schedule_utils.dart';
 
 import 'package:maori_health/domain/schedule/entities/schedule.dart';
+import 'package:maori_health/presentation/schedule/widgets/schedule_cancel_dialog_widget.dart';
 
 import 'package:maori_health/presentation/schedule/widgets/schedule_details_info_card.dart';
 import 'package:maori_health/presentation/schedule/bloc/schedule_bloc.dart';
@@ -109,26 +110,9 @@ class _ScheduleDetailsPageState extends State<ScheduleDetailsPage> {
       return _buildAcceptedActions(job);
     } else if (job?.status == JobStatusEnum.inProgress.value) {
       return _buildStartedActions(job);
-    } else if (job?.status == JobStatusEnum.finished.value) {
-      return _buildFinishedActions(job);
     } else {
       return const SizedBox.shrink();
     }
-  }
-
-  ScheduleFinishDialogData _buildFinishDialogData(Schedule job) {
-    final analysis = ScheduleUtils.analyzeFinishState(job);
-
-    return ScheduleFinishDialogData(
-      category: analysis.category,
-      scheduledDuration: analysis.scheduledDuration,
-      actualDuration: analysis.actualDuration,
-      durationDifference: analysis.durationDifference,
-      scheduledEndTimeLabel: DateConverter.formatIsoDateTime(
-        analysis.scheduleEnd?.toIso8601String() ?? job.scheduleEndTime,
-        pattern: 'h:mm a',
-      ),
-    );
   }
 
   Widget _buildPendingActions(Schedule? job) {
@@ -170,7 +154,16 @@ class _ScheduleDetailsPageState extends State<ScheduleDetailsPage> {
         const SizedBox(height: 12),
         SolidButton(
           onPressed: () async {
-            // TODO: Dispatch cancel job
+            if (job == null) return;
+            await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (dialogContext) => ScheduleCancelDialogWidget(
+                schedule: job,
+                onSave: (cancelBy, reason, reasonType, hour, minute) {},
+                onClose: () => Navigator.maybePop(dialogContext),
+              ),
+            );
           },
           backgroundColor: AppColors.amber,
           foregroundColor: Colors.black87,
@@ -193,11 +186,14 @@ class _ScheduleDetailsPageState extends State<ScheduleDetailsPage> {
         SolidButton(
           onPressed: () async {
             if (job == null) return;
-            final confirmed = await showScheduleFinishDialog(context, data: _buildFinishDialogData(job));
-            if (!mounted) return;
-            if (confirmed) {
-              context.read<ScheduleBloc>().add(ScheduleFinishEvent(scheduleId: job.id));
-            }
+            await showDialog(
+              context: context,
+              builder: (dialogContext) => ScheduleFinishDialogWidget(
+                data: ScheduleUtils.analyzeFinishState(job),
+                onSave: () => context.read<ScheduleBloc>().add(ScheduleFinishEvent(scheduleId: job.id)),
+                onClose: () => Navigator.maybePop(dialogContext),
+              ),
+            );
           },
           child: const Text(AppStrings.finishJob),
         ),
@@ -216,15 +212,6 @@ class _ScheduleDetailsPageState extends State<ScheduleDetailsPage> {
           backgroundColor: AppColors.primary,
           child: const Text(AppStrings.backToDashboard),
         ),
-      ],
-    );
-  }
-
-  Widget _buildFinishedActions(Schedule? job) {
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        SolidButton(onPressed: () => Navigator.maybePop(context), child: const Text(AppStrings.backToDashboard)),
       ],
     );
   }

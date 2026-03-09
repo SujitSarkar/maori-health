@@ -23,14 +23,14 @@ Future<bool> showConfirmationDialog(
           onPressed: () => Navigator.pop(dialogContext, false),
           child: Text(
             cancelText ?? AppStrings.cancel,
-            style: TextStyle(color: cancelColor ?? context.theme.colorScheme.onPrimary),
+            style: TextStyle(color: cancelColor ?? context.theme.colorScheme.primary),
           ),
         ),
         TextButton(
           onPressed: () => Navigator.pop(dialogContext, true),
           child: Text(
             confirmText ?? AppStrings.ok,
-            style: confirmColor != null ? TextStyle(color: confirmColor) : null,
+            style: TextStyle(color: confirmColor ?? context.theme.colorScheme.primary),
           ),
         ),
       ],

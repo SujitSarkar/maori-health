@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:maori_health/core/config/app_strings.dart';
+import 'package:maori_health/core/utils/date_converter.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/core/utils/schedule_utils.dart';
 import 'package:maori_health/domain/schedule/entities/schedule_finish_analysis_result.dart';
@@ -8,37 +9,8 @@ import 'package:maori_health/domain/schedule/entities/schedule_finish_analysis_r
 import 'package:maori_health/presentation/shared/widgets/app_dialog.dart';
 import 'package:maori_health/presentation/shared/widgets/solid_button.dart';
 
-class ScheduleFinishDialogData {
-  final ScheduleFinishCategory category;
-  final Duration scheduledDuration;
-  final Duration actualDuration;
-  final Duration durationDifference;
-  final String scheduledEndTimeLabel;
-
-  const ScheduleFinishDialogData({
-    required this.category,
-    required this.scheduledDuration,
-    required this.actualDuration,
-    required this.durationDifference,
-    required this.scheduledEndTimeLabel,
-  });
-}
-
-Future<bool> showScheduleFinishDialog(BuildContext context, {required ScheduleFinishDialogData data}) async {
-  final result = await showDialog<bool>(
-    context: context,
-    builder: (dialogContext) => ScheduleFinishDialogWidget(
-      data: data,
-      onSave: () => Navigator.of(dialogContext).pop(true),
-      onClose: () => Navigator.of(dialogContext).pop(false),
-    ),
-  );
-
-  return result ?? false;
-}
-
 class ScheduleFinishDialogWidget extends StatelessWidget {
-  final ScheduleFinishDialogData data;
+  final ScheduleFinishAnalysis data;
   final VoidCallback onSave;
   final VoidCallback onClose;
 
@@ -75,7 +47,10 @@ class ScheduleFinishDialogWidget extends StatelessWidget {
                       ScheduleUtils.finishStatusMessage(
                         data.category,
                         durationDifference: data.durationDifference,
-                        scheduledEndTimeLabel: data.scheduledEndTimeLabel,
+                        scheduledEndTimeLabel: DateConverter.formatIsoDateTime(
+                          data.scheduleEnd?.toIso8601String() ?? '',
+                          pattern: 'h:mm a',
+                        ),
                       ),
                       style: context.textTheme.bodyMedium?.copyWith(color: statusColor),
                     ),
@@ -106,7 +81,13 @@ class ScheduleFinishDialogWidget extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: SolidButton(onPressed: onSave, child: const Text(AppStrings.save)),
+                child: SolidButton(
+                  onPressed: () {
+                    Navigator.of(context).maybePop();
+                    onSave();
+                  },
+                  child: const Text(AppStrings.save),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
