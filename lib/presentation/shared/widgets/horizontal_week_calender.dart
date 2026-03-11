@@ -140,6 +140,8 @@ class HorizontalWeekCalendar extends StatefulWidget {
 
   final bool showTopNavbar;
 
+  final bool disableDayPicker;
+
   final HorizontalWeekCalenderController? controller;
 
   ///controll the date jump
@@ -175,6 +177,7 @@ class HorizontalWeekCalendar extends StatefulWidget {
     required this.maxDate,
     required this.initialDate,
     this.showTopNavbar = true,
+    this.disableDayPicker = false,
   }) : // assert(minDate != null && maxDate != null),
        assert(minDate.isBefore(maxDate)),
        assert(minDate.isBefore(initialDate) && (initialDate).isBefore(maxDate)),
@@ -497,16 +500,18 @@ class _HorizontalWeekCalendarState extends State<HorizontalWeekCalendar> {
                               builder: (_) {
                                 DateTime currentDate = listOfWeeks[ind][weekIndex];
                                 final bool isSelected =
+                                    !widget.disableDayPicker &&
                                     DateFormat('dd-MM-yyyy').format(currentDate) ==
-                                    DateFormat('dd-MM-yyyy').format(selectedDate);
+                                        DateFormat('dd-MM-yyyy').format(selectedDate);
                                 final bool isEnabled = _isReachMaximum(currentDate) && _isReachMinimum(currentDate);
+                                final bool canSelectDay = isEnabled && !widget.disableDayPicker;
                                 final BorderRadiusGeometry borderRadius =
                                     widget.borderRadius ?? const BorderRadius.all(Radius.circular(8));
                                 final Color primary = theme.colorScheme.primary;
                                 return Expanded(
                                   child: GestureDetector(
                                     // TODO: disabled
-                                    onTap: isEnabled
+                                    onTap: canSelectDay
                                         ? () {
                                             _onDateSelect(listOfWeeks[ind][weekIndex]);
                                           }

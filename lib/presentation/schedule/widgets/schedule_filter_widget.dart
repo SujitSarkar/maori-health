@@ -149,6 +149,7 @@ class WeekFilterWidget extends StatelessWidget {
           weekStartFrom: weekStartFrom,
           onDateChange: onDateChange,
           onWeekChange: onWeekChange,
+          disableDayPicker: true,
         ),
       ],
     );

@@ -20,7 +20,7 @@ import 'package:maori_health/presentation/shared/widgets/horizontal_week_calende
 import 'package:maori_health/presentation/shared/widgets/pagination_wrapper.dart';
 import 'package:maori_health/presentation/shared/widgets/swipe_refresh_wrapper.dart';
 
-const List<ScheduleFilter> scheduleFilters = [ScheduleFilter.daily, ScheduleFilter.weekly, ScheduleFilter.client];
+const List<ScheduleFilter> scheduleFilters = [ScheduleFilter.weekly, ScheduleFilter.daily, ScheduleFilter.client];
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -42,8 +42,8 @@ class SchedulePageState extends State<SchedulePage> {
     // Load initial schedules by Daily filter
     context.read<ScheduleBloc>().add(
       SchedulesLoadEvent(
-        startDate: DateConverter.toIsoDate(_selectedDate.value ?? DateTime.now()),
-        endDate: DateConverter.toIsoDate(_selectedDate.value ?? DateTime.now()),
+        startDate: DateConverter.toIsoDate(_selectedWeek.value.first),
+        endDate: DateConverter.toIsoDate(_selectedWeek.value.last),
       ),
     );
 
