@@ -31,13 +31,16 @@ class UnAuthenticatedState extends AuthState {
 
 class AuthErrorState extends AuthState {
   final String errorMessage;
+  final String? emailError;
+  final String? passwordError;
+
   @override
   final User? user;
 
-  const AuthErrorState(this.errorMessage, {this.user});
+  const AuthErrorState(this.errorMessage, {this.user, this.emailError, this.passwordError});
 
   @override
-  List<Object?> get props => [errorMessage, user];
+  List<Object?> get props => [errorMessage, user, emailError, passwordError];
 }
 
 class UpdatePassLoadingState extends AuthState {

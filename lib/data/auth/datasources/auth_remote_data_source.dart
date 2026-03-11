@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:maori_health/core/error/exceptions.dart';
+import 'package:maori_health/core/error/failures.dart';
 import 'package:maori_health/core/network/api_endpoints.dart';
 import 'package:maori_health/core/network/dio_client.dart';
+
 import 'package:maori_health/data/auth/models/forgot_pass_response_model.dart';
 import 'package:maori_health/data/auth/models/login_response_model.dart';
 
@@ -47,6 +49,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return LoginResponseModel.fromJson(body);
     } on DioException catch (e) {
       final message = (e.response?.data is Map) ? (e.response!.data as Map)['message']?.toString() : null;
+
+      if (e.response?.statusCode == HttpStatus.unprocessableEntity) {
+        final responseData = e.response?.data as Map<String, dynamic>;
+        final errors = responseData['errors'] as Map<String, dynamic>;
+        final email = errors['email']?.first.toString();
+        final password = errors['password']?.first.toString();
+
+        throw ApiAuthError(
+          errorCode: e.response?.statusCode,
+          errorMessage: message,
+          emailError: email,
+          passwordError: password,
+        );
+      }
+
       throw ApiException(statusCode: e.response?.statusCode, message: message ?? e.message ?? 'Login failed');
     }
   }

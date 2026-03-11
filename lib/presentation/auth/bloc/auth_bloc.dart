@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maori_health/core/config/app_strings.dart';
+import 'package:maori_health/core/error/failures.dart';
 import 'package:maori_health/domain/auth/repositories/auth_repository.dart';
 
 import 'package:maori_health/presentation/auth/bloc/auth_event.dart';
@@ -35,7 +36,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await _authRepository.login(email: event.email, password: event.password);
     await result.fold(
       onFailure: (error) async {
-        emit(AuthErrorState(error.errorMessage ?? AppStrings.somethingWentWrong));
+        if (error is ApiAuthError) {
+          emit(
+            AuthErrorState(
+              error.errorMessage ?? AppStrings.somethingWentWrong,
+              emailError: error.emailError,
+              passwordError: error.passwordError,
+            ),
+          );
+        } else {
+          emit(AuthErrorState(error.errorMessage ?? AppStrings.somethingWentWrong));
+        }
       },
       onSuccess: (response) async {
         emit(AuthenticatedState(user: response.user));

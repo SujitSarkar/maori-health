@@ -42,6 +42,16 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ApiException catch (e) {
       return ErrorResult(ApiError(errorCode: e.statusCode, errorMessage: e.message));
     } catch (e) {
+      if (e is ApiAuthError) {
+        return ErrorResult(
+          ApiAuthError(
+            errorCode: 0,
+            errorMessage: e.errorMessage,
+            emailError: e.emailError,
+            passwordError: e.passwordError,
+          ),
+        );
+      }
       return ErrorResult(ApiError(errorCode: 0, errorMessage: e.toString()));
     }
   }

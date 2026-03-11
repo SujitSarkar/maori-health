@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:maori_health/core/config/app_strings.dart';
 import 'package:maori_health/core/router/route_names.dart';
+import 'package:maori_health/core/utils/debounce.dart';
 import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/core/utils/form_validators.dart';
 
@@ -20,21 +21,53 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _debounce = Debounce();
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  String? _emailError;
+  String? _passwordError;
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _debounce.dispose();
     super.dispose();
   }
 
-  void _onLogin() {
-    if (!_formKey.currentState!.validate()) return;
+  void _setErrors({String? emailError, String? passwordError}) {
+    setState(() {
+      _emailError = emailError;
+      _passwordError = passwordError;
+    });
+  }
 
+  void _clearErrors() {
+    setState(() {
+      _emailError = null;
+      _passwordError = null;
+    });
+  }
+
+  void _onLogin() {
+    final hadServerErrors = _emailError != null || _passwordError != null;
+    if (hadServerErrors) {
+      _clearErrors();
+      // `forceErrorText` clears after rebuild; validate on next frame.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _submitIfValid();
+      });
+      return;
+    }
+    _submitIfValid();
+  }
+
+  void _submitIfValid() {
+    if (!_formKey.currentState!.validate()) return;
     context.read<AuthBloc>().add(
       AuthLoginEvent(email: _emailController.text.trim(), password: _passwordController.text),
     );
@@ -49,7 +82,11 @@ class _LoginPageState extends State<LoginPage> {
         if (state is AuthenticatedState) {
           context.goNamed(RouteNames.dashboard);
         } else if (state is AuthErrorState) {
-          context.showSnackBar(state.errorMessage, isError: true, onTop: true);
+          if (state.emailError != null || state.passwordError != null) {
+            _setErrors(emailError: state.emailError, passwordError: state.passwordError);
+          } else {
+            context.showSnackBar(state.errorMessage, isError: true, onTop: true);
+          }
         }
       },
       child: AuthLayout(child: _buildFormSection(screenHeight)),
@@ -64,15 +101,18 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           TextFormField(
             controller: _emailController,
+            forceErrorText: _emailError,
             keyboardType: .emailAddress,
             textInputAction: .next,
             validator: FormValidators.email(),
             autovalidateMode: .onUserInteraction,
             decoration: OutlineInputDecoration(context: context, labelText: AppStrings.email),
+            onChanged: (value) => _debounce.run(() => _clearErrors()),
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: _passwordController,
+            forceErrorText: _passwordError,
             obscureText: _obscurePassword,
             textInputAction: TextInputAction.done,
             validator: FormValidators.password(),
@@ -92,6 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
             ),
+            onChanged: (value) => _debounce.run(() => _clearErrors()),
           ),
           const SizedBox(height: 8),
           Align(
