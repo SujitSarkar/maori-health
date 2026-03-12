@@ -10,11 +10,11 @@ import 'package:maori_health/core/utils/schedule_utils.dart';
 import 'package:maori_health/domain/schedule/entities/schedule.dart';
 
 import 'package:maori_health/presentation/lookup_enums/bloc/bloc.dart';
-import 'package:maori_health/presentation/schedule/widgets/schedule_cancel_dialog_widget.dart';
+import 'package:maori_health/presentation/schedule/widgets/dialog_widgets/schedule_cancel_dialog_widget.dart';
 import 'package:maori_health/presentation/schedule/widgets/schedule_details_info_card.dart';
 import 'package:maori_health/presentation/schedule/bloc/schedule_bloc.dart';
-import 'package:maori_health/presentation/schedule/widgets/schedule_details_shimmer.dart';
-import 'package:maori_health/presentation/schedule/widgets/schedule_finish_dialog_widget.dart';
+import 'package:maori_health/presentation/schedule/widgets/shimmer_widgets/schedule_details_shimmer.dart';
+import 'package:maori_health/presentation/schedule/widgets/dialog_widgets/schedule_finish_dialog_widget.dart';
 import 'package:maori_health/presentation/shared/widgets/common_app_bar.dart';
 import 'package:maori_health/presentation/shared/widgets/confirmation_dialog.dart';
 import 'package:maori_health/presentation/shared/widgets/loading_overlay.dart';

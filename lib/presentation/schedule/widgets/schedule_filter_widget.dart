@@ -7,7 +7,7 @@ import 'package:maori_health/core/utils/extensions.dart';
 import 'package:maori_health/domain/client/entities/client.dart';
 
 import 'package:maori_health/presentation/client/bloc/client_bloc.dart';
-import 'package:maori_health/presentation/schedule/widgets/client_tile_widget.dart';
+import 'package:maori_health/presentation/client/widgets/client_tile_widget.dart';
 import 'package:maori_health/presentation/shared/widgets/auto_complete_search_field.dart';
 import 'package:maori_health/presentation/shared/widgets/horizontal_date_picker.dart';
 import 'package:maori_health/presentation/shared/widgets/horizontal_week_calender.dart';

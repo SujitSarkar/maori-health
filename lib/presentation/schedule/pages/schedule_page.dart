@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:maori_health/core/config/app_strings.dart';
 import 'package:maori_health/core/enums/schedule.enum.dart';
 import 'package:maori_health/core/router/route_names.dart';
 import 'package:maori_health/core/utils/date_converter.dart';
@@ -14,13 +15,15 @@ import 'package:maori_health/presentation/schedule/widgets/schedule_list_tile_wi
 import 'package:maori_health/presentation/schedule/bloc/schedule_bloc.dart';
 import 'package:maori_health/presentation/schedule/widgets/schedule_filter_widget.dart';
 import 'package:maori_health/presentation/schedule/widgets/schedule_header_widget.dart';
-import 'package:maori_health/presentation/schedule/widgets/schedule_shimmer.dart';
+import 'package:maori_health/presentation/schedule/widgets/shimmer_widgets/schedule_shimmer.dart';
+import 'package:maori_health/presentation/schedule/widgets/schedule_week_view_widget.dart';
+import 'package:maori_health/presentation/schedule/widgets/shimmer_widgets/schedule_week_view_shimmer.dart';
 import 'package:maori_health/presentation/shared/widgets/error_view_widget.dart';
-import 'package:maori_health/presentation/shared/widgets/horizontal_week_calender.dart';
+import 'package:maori_health/presentation/shared/widgets/no_data_found_widget.dart';
 import 'package:maori_health/presentation/shared/widgets/pagination_wrapper.dart';
 import 'package:maori_health/presentation/shared/widgets/swipe_refresh_wrapper.dart';
 
-const List<ScheduleFilter> scheduleFilters = [ScheduleFilter.weekly, ScheduleFilter.daily, ScheduleFilter.client];
+const List<ScheduleFilter> scheduleFilters = [.weekly, .daily, .client];
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -38,7 +41,7 @@ class SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    _selectedWeek.value = ScheduleUtils.getWeekDates(weekStartFrom: WeekStartFrom.monday);
+    _selectedWeek.value = ScheduleUtils.getWeekDates(weekStartFrom: .monday);
     // Load initial schedules by Daily filter
     context.read<ScheduleBloc>().add(
       SchedulesLoadEvent(
@@ -59,21 +62,21 @@ class SchedulePageState extends State<SchedulePage> {
   }
 
   Future<void> _onRefresh(BuildContext context) async {
-    if (_selectedFilter.value == ScheduleFilter.daily) {
+    if (_selectedFilter.value == .daily) {
       context.read<ScheduleBloc>().add(
         SchedulesLoadEvent(
           startDate: DateConverter.toIsoDate(_selectedDate.value ?? DateTime.now()),
           endDate: DateConverter.toIsoDate(_selectedDate.value ?? DateTime.now()),
         ),
       );
-    } else if (_selectedFilter.value == ScheduleFilter.weekly) {
+    } else if (_selectedFilter.value == .weekly) {
       context.read<ScheduleBloc>().add(
         SchedulesLoadEvent(
           startDate: DateConverter.toIsoDate(_selectedWeek.value.first),
           endDate: DateConverter.toIsoDate(_selectedWeek.value.last),
         ),
       );
-    } else if (_selectedFilter.value == ScheduleFilter.client) {
+    } else if (_selectedFilter.value == .client) {
       context.read<ScheduleBloc>().add(SchedulesLoadEvent(clientUserId: _selectedClient.value?.id));
     }
     // Load LookupEnums if not loaded
@@ -92,7 +95,7 @@ class SchedulePageState extends State<SchedulePage> {
     // Set default values
     _selectedDate.value = DateTime.now();
     _selectedClient.value = null;
-    _selectedWeek.value = ScheduleUtils.getWeekDates(weekStartFrom: WeekStartFrom.monday);
+    _selectedWeek.value = ScheduleUtils.getWeekDates(weekStartFrom: .monday);
     _onFilterChanged(_selectedDate.value, _selectedWeek.value, _selectedClient.value);
   }
 
@@ -101,21 +104,21 @@ class SchedulePageState extends State<SchedulePage> {
     _selectedWeek.value = week;
     _selectedClient.value = client;
 
-    if (_selectedFilter.value == ScheduleFilter.daily) {
+    if (_selectedFilter.value == .daily) {
       context.read<ScheduleBloc>().add(
         SchedulesLoadEvent(
           startDate: DateConverter.toIsoDate(_selectedDate.value ?? DateTime.now()),
           endDate: DateConverter.toIsoDate(_selectedDate.value ?? DateTime.now()),
         ),
       );
-    } else if (_selectedFilter.value == ScheduleFilter.weekly) {
+    } else if (_selectedFilter.value == .weekly) {
       context.read<ScheduleBloc>().add(
         SchedulesLoadEvent(
           startDate: DateConverter.toIsoDate(_selectedWeek.value.first),
           endDate: DateConverter.toIsoDate(_selectedWeek.value.last),
         ),
       );
-    } else if (_selectedFilter.value == ScheduleFilter.client) {
+    } else if (_selectedFilter.value == .client) {
       context.read<ScheduleBloc>().add(SchedulesLoadEvent(clientUserId: _selectedClient.value?.id));
     }
   }
@@ -147,39 +150,62 @@ class SchedulePageState extends State<SchedulePage> {
               },
             ),
             Expanded(
-              child: BlocBuilder<ScheduleBloc, ScheduleState>(
-                builder: (context, state) {
-                  return switch (state) {
-                    ScheduleLoadingState() => const ScheduleShimmer(),
-                    ScheduleErrorState(:final errorMessage) => ErrorViewWidget(
-                      message: errorMessage,
-                      onRetry: () => _onRefresh(context),
-                    ),
-                    ScheduleLoadedState() => PaginationWrapper(
-                      hasMore: state.hasMore,
-                      isLoadingMore: state.isLoadingMore,
-                      onLoadMore: () => context.read<ScheduleBloc>().add(const SchedulesLoadMoreEvent()),
-                      child: SwipeRefreshWrapper(
-                        onRefresh: () => _onRefresh(context),
-                        child: ListView.separated(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          padding: const .fromLTRB(12, 12, 12, 24),
-                          itemBuilder: (context, index) => ScheduleListTileWidget(
-                            schedule: state.schedules[index],
-                            onTap: () {
-                              context.pushNamed(
-                                RouteNames.scheduleDetails,
-                                extra: {'fromScreenName': 'schedule', 'schedule': state.schedules[index]},
-                              );
-                            },
-                          ),
-                          itemCount: state.schedules.length,
-                          separatorBuilder: (context, index) => const SizedBox(height: 12),
+              child: ValueListenableBuilder(
+                valueListenable: _selectedFilter,
+                builder: (context, selectedFilter, child) {
+                  return BlocBuilder<ScheduleBloc, ScheduleState>(
+                    builder: (context, state) {
+                      return switch (state) {
+                        ScheduleLoadingState() =>
+                          selectedFilter == .weekly ? const ScheduleWeekViewShimmer() : const ScheduleShimmer(),
+                        ScheduleErrorState(:final errorMessage) => ErrorViewWidget(
+                          message: errorMessage,
+                          onRetry: () => _onRefresh(context),
                         ),
-                      ),
-                    ),
-                    _ => const SizedBox.shrink(),
-                  };
+                        ScheduleLoadedState() =>
+                          state.schedules.isEmpty
+                              ? NoDataFoundWidget(message: AppStrings.noDataFound)
+                              : selectedFilter == .weekly
+                              ? SwipeRefreshWrapper(
+                                  onRefresh: () => _onRefresh(context),
+                                  child: ScheduleWeekViewWidget(
+                                    weekDates: _selectedWeek.value,
+                                    schedules: state.schedules,
+                                    onScheduleTap: (schedule) {
+                                      context.pushNamed(
+                                        RouteNames.scheduleDetails,
+                                        extra: {'fromScreenName': 'schedule', 'schedule': schedule},
+                                      );
+                                    },
+                                  ),
+                                )
+                              : PaginationWrapper(
+                                  hasMore: state.hasMore,
+                                  isLoadingMore: state.isLoadingMore,
+                                  onLoadMore: () => context.read<ScheduleBloc>().add(const SchedulesLoadMoreEvent()),
+                                  child: SwipeRefreshWrapper(
+                                    onRefresh: () => _onRefresh(context),
+                                    child: ListView.separated(
+                                      physics: const AlwaysScrollableScrollPhysics(),
+                                      padding: const .fromLTRB(12, 12, 12, 24),
+                                      itemBuilder: (context, index) => ScheduleListTileWidget(
+                                        schedule: state.schedules[index],
+                                        onTap: () {
+                                          context.pushNamed(
+                                            RouteNames.scheduleDetails,
+                                            extra: {'fromScreenName': 'schedule', 'schedule': state.schedules[index]},
+                                          );
+                                        },
+                                      ),
+                                      itemCount: state.schedules.length,
+                                      separatorBuilder: (context, index) => const SizedBox(height: 12),
+                                    ),
+                                  ),
+                                ),
+                        _ => const SizedBox.shrink(),
+                      };
+                    },
+                  );
                 },
               ),
             ),
